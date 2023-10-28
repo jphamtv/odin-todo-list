@@ -1,0 +1,21 @@
+/* src/style.css */
+
+* {
+  outline: 1px solid lightcoral;
+}
+
+#content {
+  display: grid;
+}
+
+header {
+  background-color: lightblue;
+}
+
+.side-menu-container {
+  background-color: lightgoldenrodyellow;
+}
+
+.todo-items-container {
+  background-color: lightseagreen;
+}
