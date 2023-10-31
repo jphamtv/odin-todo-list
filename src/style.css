@@ -16,8 +16,9 @@
 }
 
 body {
-  color: white;
+  color: #E2E2E2;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  font-size: 14px;
 }
 
 ul {
@@ -29,16 +30,20 @@ ul {
 
 
 
-/* HEADER */
-header {
+/* TOP BAR */
+.top-bar {
   display: flex;
   align-items: center;
   grid-column: 1 / 3;
   grid-row: 1 / 2;
   background-color: #333333;
+  position: fixed;
+  width: 100%;
+  height: 3rem;
+  z-index: 1;
 }
 
-.header-wrapper {
+.top-bar-wrapper {
   display: flex;
   gap: .5rem;
   align-items: center;
@@ -69,10 +74,14 @@ header {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
   background-color: #282828;
+  position: fixed;
+  top: 48px;
+  height: calc(100% - 48px);
+  width: 18rem;
 }
 
 .left-menu-wrapper {
-  margin: 3rem 0 3rem 2rem;
+  margin: 2.5rem 0 0 2rem;
 }
 
 .inbox-option {
@@ -140,27 +149,47 @@ h2 {
 
 .main-wrapper {
   max-width: 50rem;
-  margin: 3rem 2rem 0;
+  margin: 3rem auto;
+  padding: 0 2rem;
 }
 
 h1 {
   font-size: 1.5rem;
+  margin: 2rem 0 1rem;
 }
 
 .task-item {
   display: flex;
   gap: 1rem;
-  padding: 1rem 0;
-  margin-top: 1rem;
-  border-bottom: 1px solid white;
+  padding: .75rem 0 .5rem;
+  border-bottom: 1px solid rgb(58, 58, 58);
 }
 
 .checkbox-btn {
-  width: 24px;
-  height: 24px;
-  border: 1px solid #fff;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #989898;
   border-radius: 20px;
   background-color: rgb(0, 0, 0, .0);
+}
+
+.checkbox-btn:hover {
+  background-color: #3b3b3b;
+}
+
+.checkmark-icon {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+}
+
+.checkbox-btn .checkmark-icon {
+  visibility: hidden;
+}
+
+.checkbox-btn:hover .checkmark-icon {
+  visibility: visible;
 }
 
 .add-task-btn {
@@ -171,11 +200,33 @@ h1 {
   border: none;
   background-color: rgb(255, 255, 255, .0);
   color: #fff;
+  margin-top: .5rem;
 }
 
 .add-task-btn:hover {
   background-color: rgb(255, 255, 255, .10);
 }
+
+.title {
+  margin-bottom: .5rem;
+  line-height: 1.75;
+}
+
+.description {
+  margin-bottom: .75rem;
+  color: #8f8f8f;
+  font-size: .75rem;
+  font-weight: 300;
+}
+
+.due-date {
+  font-size: .75rem;
+  font-weight: 300;
+}
+
+
+
+
 
 /* FORM */
 
@@ -186,11 +237,12 @@ h1 {
 
 form {
   padding: .5rem .5rem 0;
-  border: 1px solid #fff;
+  border: 1px solid rgb(98, 98, 98);
   border-radius: 8px;
 }
 
-input {
+input,
+textarea {
   height: 2rem;
   background-color: rgb(0, 0, 0, .0);
   border: none;
@@ -201,14 +253,15 @@ input {
   margin: .5rem 0;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
 }
 
 .form-footer {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #fff;
+  border-top: 1px solid rgb(98, 98, 98);
   padding: .75rem 0;
 }
 
@@ -225,7 +278,7 @@ select {
   padding: .5rem;
   background-color: rgb(0, 0, 0, .0);
   color: white;
-  border: 1px solid #fff;
+  border: 1px solid rgb(98, 98, 98);
   border-radius: 4px;
 }
 
@@ -233,9 +286,13 @@ select {
   padding: 0 .5rem;
   background-color: rgb(0, 0, 0, .0);
   color: white;
-  border: 1px solid #fff;
+  border: 1px solid rgb(98, 98, 98);
   border-radius: 4px;
   margin-right: 4px;
+}
+
+input[type="date"] {
+  filter: invert(45%) hue-rotate(180deg);
 }
 
 .submit-btn {
