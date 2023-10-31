@@ -10,11 +10,72 @@
 <script defer src="main.js"></script></head>
 <body>
   <div id="content">
-    <header>    
-      <h1>Todolist App</h1>
+
+    <header> 
+      <div class="header-wrapper">
+        <button>Menu Control</button>   
+        <button>Home</button>
+      </div>
     </header>
-    <div class="side-menu-container"></div>
-    <div class="todo-items-container"></div>
+
+    <div class="left-menu-container">
+      <div class="left-menu-wrapper">
+        <div class="inbox-option">Inbox</div>
+        <div class="projects-container">
+          <h2>Projects</h2>
+          <ul class="project-list">
+            <li>
+              <div class="project-item">Project name goes here</div>
+            </li>
+          </ul>
+          <button class="add-project-btn">+ Add project</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <div class="main-wrapper">
+        <h1 class="category-title">Inbox</h1>
+        <div class="task-list-container">
+          <ul class="task-list">
+            <li class="task-item">
+              <div>
+                <button type="button" class="checkbox-btn">
+                  <svg width="24" height="24"><path fill="#fff" d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
+                  <span class="checkbox-circle"></span>
+                </button>
+              </div>
+              <div>
+                <div class="title">Title goes here</div>
+                <div class="description">Description goes here</div>
+                <div class="due-date">Friday</div>
+              </div>
+            </li>
+          </ul>
+
+          <form action="" id="create-task">
+            <input type="text" id="title" />
+            <input type="text" class="type" id="description" />
+            <input type="date" class="type" id="due-date" />
+            <select name="priority" id="priority">
+              <option value="priority-1">Priority 1</option>
+              <option value="priority-2">Priority 2</option>
+              <option value="priority-3">Priority 3</option>
+              <option value="" selected>Priority 4</option>
+            </select>
+            <select name="project" id="project">
+              <option value="inbox" selected>Inbox</option>
+            </select>
+            <button>Cancel</button>
+            <button>Add task</button>
+          </form>
+
+          <button class="add-task-btn">+ Add task</button>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </body>
 </html>
