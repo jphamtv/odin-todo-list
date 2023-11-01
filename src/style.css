@@ -231,6 +231,10 @@ h1 {
 
 /* FORM */
 
+.form-container {
+  display: none;
+}
+
 .form-container>form {
   display: flex;
   flex-direction: column;
