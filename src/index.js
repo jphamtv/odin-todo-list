@@ -1,13 +1,19 @@
 // src/index.js
 
 import './style.css';
-import { displayTasks, showCreateTaskForm, closeCreateTaskForm, handleCreateTaskFormSubmission } from './taskView.js';
+import { displayTasks, showCreateTaskForm, closeCreateTaskForm, handleCreateTaskFormSubmission, attachCheckBoxButtonListeners } from './taskView.js';
 
 
-// Initialize the task list UI
-displayTasks();
+function initializeEventListeners() {
+  showCreateTaskForm();
+  closeCreateTaskForm();
+  handleCreateTaskFormSubmission();
+}
 
-// Initialize the form to create tasks
-showCreateTaskForm();
-closeCreateTaskForm();
-handleCreateTaskFormSubmission();
+function initializeApp() {
+  displayTasks();
+  initializeEventListeners();
+  attachCheckBoxButtonListeners();
+}
+
+initializeApp();

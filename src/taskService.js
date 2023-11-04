@@ -1,6 +1,6 @@
 // src/taskService.js
 import { v4 as uuidv4 } from 'uuid'
-import { displayTasks, clearFormFields } from "./taskView.js";
+import { displayTasks, clearFormFields, attachCheckBoxButtonListeners } from "./taskView.js";
 
 // Set the data structure to store tasks
 export let myTasks = [
@@ -24,7 +24,7 @@ export let myTasks = [
   },
   { 
     id: 3,
-    category: 'inbox',
+    category: 'Project A',
     title: 'My third task', 
     description: null, 
     dueDate: null, 
@@ -68,11 +68,23 @@ export function createTask(category, title, description, dueDate, priority, task
 
 
 
-// Function to delete tasks
+// Function to delete tasks by their unique ID
 function deleteTask() {
-
+  myTasks = myTasks.filter(task => task.id !== taskId);
+  displayTasks();
 }
 
+
+export function markTaskComplete(taskId) {
+  const selectedTask = myTasks.find(task => task.id === taskId);
+  
+  // Update the taskComplete status to true
+  if (selectedTask) {
+    selectedTask.taskComplete = true;  
+  }
+  
+  displayTasks();
+}
 
 // Function to mark tasks as complete
 function toggleTaskCompletion() {

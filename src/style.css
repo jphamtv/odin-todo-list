@@ -180,8 +180,8 @@ h1 {
 
 .checkmark-icon {
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: -3px;
+  right: -3px;
 }
 
 .checkbox-btn .checkmark-icon {
@@ -189,6 +189,15 @@ h1 {
 }
 
 .checkbox-btn:hover .checkmark-icon {
+  visibility: visible;
+}
+
+.checkbox-btn.checked {
+  background-color: #989898;
+  visibility: visible;
+}
+
+.checkmark-icon.checked {
   visibility: visible;
 }
 
@@ -210,6 +219,11 @@ h1 {
 .title {
   margin-bottom: .5rem;
   line-height: 1.75;
+}
+
+.title.checked {
+  color: #7f7f7f;
+  text-decoration: line-through;
 }
 
 .description {
