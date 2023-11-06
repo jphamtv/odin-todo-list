@@ -1,11 +1,11 @@
 // src/taskService.js
 import { v4 as uuidv4 } from 'uuid'
-import { displayTasks, clearFormFields, attachCheckBoxButtonListeners } from "./taskView.js";
+import { displayTasks, clearFormFields, showCompletedTasks, attachCheckBoxButtonListeners } from "./taskView.js";
 
 // Set the data structure to store tasks
 export let myTasks = [
   { 
-    id: 1,
+    id: '1',
     category: 'inbox',
     title: 'My first task', 
     description: 'Description of my first task', 
@@ -14,7 +14,7 @@ export let myTasks = [
     taskComplete: false,
   },
   { 
-    id: 2,
+    id: '2',
     category: 'inbox',
     title: 'My second task', 
     description: null, 
@@ -23,7 +23,7 @@ export let myTasks = [
     taskComplete: false,
   },
   { 
-    id: 3,
+    id: '3',
     category: 'Project A',
     title: 'My third task', 
     description: null, 
@@ -47,7 +47,6 @@ class Task {
 }
 
 
-// Function to create tasks
 export function createTask(category, title, description, dueDate, priority, taskComplete) {
 
   // Generate unique ID for the task
@@ -56,7 +55,6 @@ export function createTask(category, title, description, dueDate, priority, task
   // Create a new task using the Task class
   const task = new Task(id, category, title, description, dueDate, priority, taskComplete);
 
-  // Add task to the database
   myTasks.push(task)
 
   // Update the UI
@@ -69,7 +67,7 @@ export function createTask(category, title, description, dueDate, priority, task
 
 
 // Function to delete tasks by their unique ID
-function deleteTask() {
+export function deleteTask(taskId) {
   myTasks = myTasks.filter(task => task.id !== taskId);
   displayTasks();
 }
@@ -81,14 +79,23 @@ export function markTaskComplete(taskId) {
   // Update the taskComplete status to true
   if (selectedTask) {
     selectedTask.taskComplete = true;  
+  } else {
+    console.error('Task not found');
   }
   
   displayTasks();
 }
 
-// Function to mark tasks as complete
-function toggleTaskCompletion() {
 
+export function undoTaskComplete() {
+  const selectedTask = myTasks.find(task => task.id === taskId);
+  
+  // Update the taskComplete status to false
+  if (selectedTask) {
+    selectedTask.taskComplete = false;  
+  }
+  
+  showCompletedTasks();
 }
 
 
@@ -98,7 +105,15 @@ function updateTask() {
 }
 
 
-// Function to change priority of a task
-function setPriority() {
+export function setPriorityLevel(taskId, selectedPriority) {
+  const selectedTask = myTasks.find(task => task.id === taskId);
 
+  // Update the priority level of the selected task
+  if (selectedTask) {
+    selectedTask.priority = selectedPriority;
+  } else {
+    console.error('Task not found');
+  }
+
+  displayTasks();
 }

@@ -1,6 +1,6 @@
 // src/taskView.js
 
-import { myTasks, createTask, markTaskComplete } from './taskService.js';
+import { myTasks, createTask, deleteTask, markTaskComplete } from './taskService.js';
 
 
 export function displayTasks() {
@@ -28,8 +28,14 @@ export function displayTasks() {
         <svg class="checkmark-icon" data-task-id="${task.id}" width="24" height="24"><path fill="#fff" d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
         </button>
       </div>
-      <div>
-        <div class="title">${task.title}</div>
+      <div class="task-content">
+        <div class="task-title-wrapper">
+          <div class="title">${task.title}</div>
+          <div>
+            <button class="edit-btn" data-task-id="${task.id}">Edit</button>
+            <button class="delete-btn" data-task-id="${task.id}">Delete</button>
+          </div>
+        </div>
         ${task.description ? `<div class="description">${task.description}</div>` : ''}
         ${task.dueDate ? `<div class="due-date">${task.dueDate}</div>` : ''}
       </div>
@@ -56,6 +62,9 @@ export function handleCreateTaskFormSubmission() {
   
     // Create a new task object and add it to the database
     createTask(category, title, description, dueDate, priority);
+
+    // Refocus the title input field
+    document.querySelector('#title').focus(); 
   });
 }
 
@@ -80,6 +89,14 @@ export function showCreateTaskForm() {
     });  
   });
 }
+
+// Change behavior of the return key to programmatically click the 'Add task' btn.
+document.addEventListener('keydown', function(event) {
+  if (event.key === "Enter") {
+      event.preventDefault(); 
+      document.querySelector('.submit-btn').click(); 
+  }
+});
 
 
 export function closeCreateTaskForm() {
@@ -111,26 +128,22 @@ export function attachCheckBoxButtonListeners() {
 }
 
 
-// export function attachCheckBoxButtonListeners() {
-//   console.log('Attached')
-//   // Attach the event listener to a parent element that exists at page load
-//   document.body.addEventListener('click', (event) => {
-//     console.log('body clicked');
-//     // Check if the clicked element is a checkbox button inside the task list
-//     if (event.target.classList.contains('.checkmark-icon') && event.target.closest('.checkbox-btn')) {
+export function attachDeleteButtonListeners() {
+  const taskListElement = document.querySelector('#task-list');
+  taskListElement.addEventListener('click', (event) => {
+    if (event.target.classList.contains('delete-btn')) {
       
-//       // Get the task ID 
-//       const taskId = event.target.dataset.taskId;
-//       console.log(taskId);
+      // Get the task ID 
+      const taskId = event.target.dataset.taskId;
 
-//       // Update taskComplete property
-//       markTaskComplete(taskId);
-//     }
-//   });
-// }
+      // Update taskComplete property
+      deleteTask(taskId);
+    }
+  });
+}
 
 
-function showCompletedTasks() {
+export function showCompletedTasks() {
   // Get a reference to the task list element
   const taskList = document.querySelector('#task-list');
   
@@ -153,12 +166,15 @@ function showCompletedTasks() {
       // HTML structure of the new task item
       taskItem.innerHTML = `
       <div>
-        <button type="button" class="checkbox-btn checked" data-task-id="${task.id}">
-        <svg class="checkmark-icon checked" width="24" height="24"><path d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
+        <button type="button" class="checkbox-btn checked">
+        <svg class="checkmark-icon checked" data-task-id="${task.id}" width="24" height="24"><path d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
         </button>
       </div>
-      <div>
-        <div class="title checked">${task.title}</div>
+      <div class="task-content">
+        <div class="task-title-wrapper">
+          <div class="title checked">${task.title}</div>
+          <button class="delete-btn" data-task-id="${task.id}">Delete</button>
+        </div>
         ${task.description ? `<div class="description">${task.description}</div>` : ''}
         ${task.dueDate ? `<div class="due-date">${task.dueDate}</div>` : ''}
       </div>
@@ -170,7 +186,25 @@ function showCompletedTasks() {
   });
 }
 
+const showCompletedTasksBtn = document.querySelector('.show-completed-tasks-btn');
+const hideCompletedTasksBtn = document.querySelector('.hide-completed-tasks-btn');
 
-function hideCompletedTasks() {
-  console.log('Hello');
+export function handleShowCompletedTasksButton() {
+  showCompletedTasksBtn.addEventListener('click', () => {
+    showCompletedTasks();
+
+    showCompletedTasksBtn.style.display = 'none';
+    hideCompletedTasksBtn.style.display = 'block';
+    handleHideCompletedTasksButton();
+  });
+}
+
+
+function handleHideCompletedTasksButton() {
+  hideCompletedTasksBtn.addEventListener('click', () => {
+    displayTasks();
+    
+    hideCompletedTasksBtn.style.display = 'none';
+    showCompletedTasksBtn.style.display = 'block';
+  });
 }
