@@ -164,7 +164,8 @@ h1 {
   margin: 2rem 0 1rem;
 }
 
-.show-completed-tasks-btn {
+
+.toggle-completed-tasks-btn {
   display: block;
   padding: 8px;
   border-radius: 4px;
@@ -173,17 +174,7 @@ h1 {
   background-color: rgb(255, 255, 255, .10);
 }
 
-.hide-completed-tasks-btn {
-  display: none;
-  padding: 8px;
-  border-radius: 4px;
-  border: none;
-  color: #fff;
-  background-color: rgb(255, 255, 255, .10);
-}
-
-.show-completed-tasks-btn:hover,
-.hide-completed-tasks-btn {
+.toggle-completed-tasks-btn:hover{
   background-color: rgb(255, 255, 255, .20);
 }
 

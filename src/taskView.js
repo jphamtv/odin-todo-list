@@ -1,9 +1,14 @@
 // src/taskView.js
+import { 
+  getTasksFromLocalStorage, 
+  createTask, 
+  deleteTask, 
+  markTaskComplete, 
+  myTasks
+} from './taskService.js';
 
-import { myTasks, createTask, deleteTask, markTaskComplete } from './taskService.js';
 
-
-export function displayTasks() {
+export function displayIncompleteTasks(tasks) {
   // Get a reference to the task list element
   const taskList = document.querySelector('#task-list');
   
@@ -11,8 +16,8 @@ export function displayTasks() {
   taskList.innerHTML = '';
   
   // Loop through the tasks and update the list
-  myTasks.forEach(task => {
-    if (task.taskComplete === false) {
+  tasks.forEach(task => {
+    if (!task.taskComplete) {
       const taskItem = document.createElement('li');
       
       // Add task-item class attribute
@@ -44,6 +49,51 @@ export function displayTasks() {
       // Add the new task item
       taskList.appendChild(taskItem);    
     }
+  });
+}
+
+
+export function displayAllTasks(tasks) {
+  // Get a reference to the task list element
+  const taskList = document.querySelector('#task-list');
+  
+  // Clear the task list
+  taskList.innerHTML = '';
+  
+  // Helper function to create task item elements
+  const createTaskItem = (task) => {
+    const taskItem = document.createElement('li');
+    taskItem.classList.add('task-item');
+    taskItem.dataset.taskId = task.id;
+    taskItem.innerHTML = `
+      <div>
+        <button type="button" class="checkbox-btn${task.taskComplete ? ' checked' : ''}">
+        <svg class="checkmark-icon${task.taskComplete ? ' checked' : ''}" data-task-id="${task.id}" width="24" height="24"><path d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
+        </button>
+      </div>
+      <div class="task-content">
+        <div class="task-title-wrapper">
+          <div class="title${task.taskComplete ? ' checked' : ''}">${task.title}</div>
+          <div>
+            ${!task.taskComplete ? `<button class="edit-btn" data-task-id="${task.id}">Edit</button>` : ''}
+            <button class="delete-btn" data-task-id="${task.id}">Delete</button>
+          </div>
+        </div>
+        ${task.description ? `<div class="description">${task.description}</div>` : ''}
+        ${task.dueDate ? `<div class="due-date">${task.dueDate}</div>` : ''}
+      </div>
+    `;
+    return taskItem;
+  };
+
+  // Display incomplete tasks
+  tasks.filter(task => !task.taskComplete).forEach(task => {
+    taskList.appendChild(createTaskItem(task));
+  });
+
+  // Display completed tasks
+  tasks.filter(task => task.taskComplete).forEach(task => {
+    taskList.appendChild(createTaskItem(task));
   });
 }
 
@@ -143,68 +193,23 @@ export function attachDeleteButtonListeners() {
 }
 
 
-export function showCompletedTasks() {
-  // Get a reference to the task list element
-  const taskList = document.querySelector('#task-list');
-  
-  // Clear the task list
-  taskList.innerHTML = '';
-  
-  displayTasks();
-  
-  // Loop through the tasks and update the list
-  myTasks.forEach(task => {
-    if (task.taskComplete === true) {
-      const taskItem = document.createElement('li');
-      
-      // Add task-item class attribute
-      taskItem.classList.add('task-item');
-      
-      // Set the index number to the data-task-id attribute
-      taskItem.dataset.taskId = task.id;
-      
-      // HTML structure of the new task item
-      taskItem.innerHTML = `
-      <div>
-        <button type="button" class="checkbox-btn checked">
-        <svg class="checkmark-icon checked" data-task-id="${task.id}" width="24" height="24"><path d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
-        </button>
-      </div>
-      <div class="task-content">
-        <div class="task-title-wrapper">
-          <div class="title checked">${task.title}</div>
-          <button class="delete-btn" data-task-id="${task.id}">Delete</button>
-        </div>
-        ${task.description ? `<div class="description">${task.description}</div>` : ''}
-        ${task.dueDate ? `<div class="due-date">${task.dueDate}</div>` : ''}
-      </div>
-      `;
-      
-      // Add the new task item
-      taskList.appendChild(taskItem);    
+// Single button for toggling the display of completed tasks
+const toggleCompletedTasksBtn = document.querySelector('.toggle-completed-tasks-btn');
+
+// Initial state for whether completed tasks are shown
+export let showCompletedTasks = false;
+
+export function handleToggleCompletedTasksButton() {
+  toggleCompletedTasksBtn.addEventListener('click', () => {
+    const tasks = getTasksFromLocalStorage();
+    showCompletedTasks = !showCompletedTasks;
+
+    if (showCompletedTasks) {
+      displayAllTasks(tasks);
+      toggleCompletedTasksBtn.textContent = 'Hide completed tasks';
+    } else {
+      displayIncompleteTasks(tasks);
+      toggleCompletedTasksBtn.textContent = 'Show completed tasks';
     }
-  });
-}
-
-const showCompletedTasksBtn = document.querySelector('.show-completed-tasks-btn');
-const hideCompletedTasksBtn = document.querySelector('.hide-completed-tasks-btn');
-
-export function handleShowCompletedTasksButton() {
-  showCompletedTasksBtn.addEventListener('click', () => {
-    showCompletedTasks();
-
-    showCompletedTasksBtn.style.display = 'none';
-    hideCompletedTasksBtn.style.display = 'block';
-    handleHideCompletedTasksButton();
-  });
-}
-
-
-function handleHideCompletedTasksButton() {
-  hideCompletedTasksBtn.addEventListener('click', () => {
-    displayTasks();
-    
-    hideCompletedTasksBtn.style.display = 'none';
-    showCompletedTasksBtn.style.display = 'block';
   });
 }

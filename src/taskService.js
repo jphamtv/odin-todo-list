@@ -1,6 +1,11 @@
 // src/taskService.js
 import { v4 as uuidv4 } from 'uuid'
-import { displayTasks, clearFormFields, showCompletedTasks, attachCheckBoxButtonListeners } from "./taskView.js";
+import { 
+  displayIncompleteTasks, 
+  clearFormFields, displayAllTasks, 
+  attachCheckBoxButtonListeners,
+  showCompletedTasks 
+} from "./taskView.js";
 
 // Set the data structure to store tasks
 export let myTasks = [
@@ -33,6 +38,34 @@ export let myTasks = [
   },
 ]
 
+export function updateMyTasks(newTasks) {
+  // Clear out the tasks
+  myTasks.length = 0;
+
+  // Add the new tasks
+  newTasks.forEach(task => myTasks.push(task));
+}
+
+
+export function saveTasksToLocalStorage(myTasks) {
+  localStorage.setItem('tasks', JSON.stringify(myTasks));
+}
+
+
+export function getTasksFromLocalStorage() {
+  const storedTasks = localStorage.getItem('tasks');
+  if (storedTasks) {
+    return JSON.parse(storedTasks);
+  }
+  return []; // Return empty array if nothing in localStorage
+}
+
+
+function findTaskById(taskId) {
+  return myTasks.find(task => task.id === taskId);
+}
+
+
 // Function to create tasks
 class Task {
   constructor(id, category, title, description, dueDate, priority, taskComplete = false) {
@@ -48,7 +81,6 @@ class Task {
 
 
 export function createTask(category, title, description, dueDate, priority, taskComplete) {
-
   // Generate unique ID for the task
   const id = uuidv4();
 
@@ -56,46 +88,62 @@ export function createTask(category, title, description, dueDate, priority, task
   const task = new Task(id, category, title, description, dueDate, priority, taskComplete);
 
   myTasks.push(task)
+  saveTasksToLocalStorage(myTasks);
 
   // Update the UI
-  displayTasks();
+  displayIncompleteTasks(myTasks);
 
   // Clear the form fields
   clearFormFields();
 }
 
 
-
 // Function to delete tasks by their unique ID
 export function deleteTask(taskId) {
-  myTasks = myTasks.filter(task => task.id !== taskId);
-  displayTasks();
+  const tasks = getTasksFromLocalStorage();
+  const updatedTasks = tasks.filter(task => task.id !== taskId);
+  saveTasksToLocalStorage(updatedTasks);
+
+  if (!showCompletedTasks) {
+    displayIncompleteTasks(updatedTasks);
+  } else {
+    displayAllTasks(updatedTasks);
+  }
 }
 
 
+
 export function markTaskComplete(taskId) {
-  const selectedTask = myTasks.find(task => task.id === taskId);
+  // Operate on the latest tasks array from localStorage
+  const tasks = getTasksFromLocalStorage();
+  const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+  if (taskIndex !== -1) {
+    tasks[taskIndex].taskComplete = true;
   
-  // Update the taskComplete status to true
-  if (selectedTask) {
-    selectedTask.taskComplete = true;  
+    saveTasksToLocalStorage(tasks);
+    displayIncompleteTasks(tasks);
+
   } else {
     console.error('Task not found');
-  }
-  
-  displayTasks();
+  }  
 }
 
 
 export function undoTaskComplete() {
-  const selectedTask = myTasks.find(task => task.id === taskId);
+  const tasks = getTasksFromLocalStorage();
+  const taskIndex = tasks.findIndex(task => task.id === taskId);
   
   // Update the taskComplete status to false
-  if (selectedTask) {
-    selectedTask.taskComplete = false;  
-  }
+  if (taskIndex !== -1) {
+    tasks[taskIndex].taskComplete = false;
   
-  showCompletedTasks();
+    saveTasksToLocalStorage(tasks);
+    displayAllTasks(tasks);
+
+  } else {
+    console.error('Task not found');
+  }
 }
 
 
@@ -115,5 +163,5 @@ export function setPriorityLevel(taskId, selectedPriority) {
     console.error('Task not found');
   }
 
-  displayTasks();
+  displayIncompleteTasks();
 }
