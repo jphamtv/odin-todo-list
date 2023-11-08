@@ -3,7 +3,7 @@ import {
   getTasksFromLocalStorage, 
   createTask, 
   deleteTask, 
-  markTaskComplete, 
+  toggleTaskComplete, 
   myTasks
 } from './taskService.js';
 
@@ -172,7 +172,7 @@ export function attachCheckBoxButtonListeners() {
       const taskId = event.target.dataset.taskId;
 
       // Update taskComplete property
-      markTaskComplete(taskId);
+      toggleTaskComplete(taskId);
     }
   });
 }

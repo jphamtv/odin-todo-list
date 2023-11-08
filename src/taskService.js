@@ -57,12 +57,7 @@ export function getTasksFromLocalStorage() {
   if (storedTasks) {
     return JSON.parse(storedTasks);
   }
-  return []; // Return empty array if nothing in localStorage
-}
-
-
-function findTaskById(taskId) {
-  return myTasks.find(task => task.id === taskId);
+  return []; // Return empty array if nothing in localStorage to avoid error
 }
 
 
@@ -103,6 +98,7 @@ export function deleteTask(taskId) {
   const tasks = getTasksFromLocalStorage();
   const updatedTasks = tasks.filter(task => task.id !== taskId);
   saveTasksToLocalStorage(updatedTasks);
+  updateMyTasks(updatedTasks);
 
   if (!showCompletedTasks) {
     displayIncompleteTasks(updatedTasks);
@@ -113,37 +109,40 @@ export function deleteTask(taskId) {
 
 
 
-export function markTaskComplete(taskId) {
+// export function markTaskComplete(taskId) {
+//   // Operate on the latest tasks array from localStorage
+//   const tasks = getTasksFromLocalStorage();
+//   const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+//   if (taskIndex !== -1) {
+//     tasks[taskIndex].taskComplete = true;
+  
+//     saveTasksToLocalStorage(tasks);
+//     displayIncompleteTasks(tasks);
+
+//   } else {
+//     console.error('Task not found');
+//   }  
+// }
+
+export function toggleTaskComplete(taskId) {
   // Operate on the latest tasks array from localStorage
   const tasks = getTasksFromLocalStorage();
   const taskIndex = tasks.findIndex(task => task.id === taskId);
 
-  if (taskIndex !== -1) {
-    tasks[taskIndex].taskComplete = true;
-  
+  if (taskIndex !== -1 && tasks[taskIndex].taskComplete === false) {
+    tasks[taskIndex].taskComplete = true;  
     saveTasksToLocalStorage(tasks);
     displayIncompleteTasks(tasks);
 
-  } else {
-    console.error('Task not found');
-  }  
-}
-
-
-export function undoTaskComplete() {
-  const tasks = getTasksFromLocalStorage();
-  const taskIndex = tasks.findIndex(task => task.id === taskId);
-  
-  // Update the taskComplete status to false
-  if (taskIndex !== -1) {
+  } else if (taskIndex !== -1 && tasks[taskIndex].taskComplete === true) {
     tasks[taskIndex].taskComplete = false;
-  
     saveTasksToLocalStorage(tasks);
     displayAllTasks(tasks);
-
-  } else {
+  }  
+    else {
     console.error('Task not found');
-  }
+  }  
 }
 
 
