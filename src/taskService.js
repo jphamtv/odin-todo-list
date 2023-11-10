@@ -2,9 +2,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import { 
   displayIncompleteTasks, 
-  clearFormFields, displayAllTasks, 
-  attachCheckBoxButtonListeners,
-  showCompletedTasks 
+  clearFormFields, 
+  displayAllTasks, 
+  showCompletedTasks, 
+  displayProjects
 } from "./taskView.js";
 
 // Set the data structure to store tasks
@@ -38,6 +39,18 @@ export let myTasks = [
   },
 ]
 
+export let myProjects = [
+  {
+    id: '1',
+    title: 'Software Development'
+  },
+  {
+    id: '2',
+    title: 'Personal Tasks'
+  },
+]
+
+
 export function updateMyTasks(newTasks) {
   // Clear out the tasks
   myTasks.length = 0;
@@ -61,6 +74,36 @@ export function getTasksFromLocalStorage() {
 }
 
 
+export function updateMyProjects(newProjects) {
+  // Clear out the tasks
+  myProjects.length = 0;
+
+  // Add the new tasks
+  newProjects.forEach(project => myProjects.push(project));
+}
+
+
+export function saveProjectsToLocalStorage(myProjects) {
+  localStorage.setItem('projects', JSON.stringify(myProjects));
+}
+
+
+export function getProjectsFromLocalStorage() {
+  const storedProjects = localStorage.getItem('projects');
+  if (storedProjects) {
+    return JSON.parse(storedProjects);
+  }
+  return []; // Return empty array if nothing in localStorage to avoid error
+}
+
+// Function to create projects
+class Project {
+  constructor(id, title) {
+    this.id = id;
+    this.title = title;
+  }
+}
+
 // Function to create tasks
 class Task {
   constructor(id, category, title, description, dueDate, priority, taskComplete = false) {
@@ -72,6 +115,23 @@ class Task {
     this.priority = priority;
     this.taskComplete = taskComplete;
   }
+}
+
+export function createProject(title) {
+  // Generate unique ID for the project
+  const id = uuidv4();
+
+  // Create a new task using the Project class
+  const project = new Project(id, title);
+
+  myProjects.push(project)
+  saveProjectsToLocalStorage(myProjects);
+
+  // Update the UI
+  displayProjects(myProjects);
+
+  // Clear the form fields
+  clearFormFields();
 }
 
 
@@ -107,23 +167,6 @@ export function deleteTask(taskId) {
   }
 }
 
-
-
-// export function markTaskComplete(taskId) {
-//   // Operate on the latest tasks array from localStorage
-//   const tasks = getTasksFromLocalStorage();
-//   const taskIndex = tasks.findIndex(task => task.id === taskId);
-
-//   if (taskIndex !== -1) {
-//     tasks[taskIndex].taskComplete = true;
-  
-//     saveTasksToLocalStorage(tasks);
-//     displayIncompleteTasks(tasks);
-
-//   } else {
-//     console.error('Task not found');
-//   }  
-// }
 
 export function toggleTaskComplete(taskId) {
   // Operate on the latest tasks array from localStorage

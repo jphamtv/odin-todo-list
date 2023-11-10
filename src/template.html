@@ -12,6 +12,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">  
 </head>
 <body>
+  <dialog id="add-project-modal">
+    <form action="" id="create-project-form">
+      <h2 class="add-project-modal-title">Add project</h2>
+      <div class="project-title-wrapper">
+        <input type="text" id="project-title-input">
+      </div>
+      <div class="modal-btns">
+        <button class="close-modal-btn">Cancel</button>
+        <button class="add-project-to-list" type="submit">Add project</button>
+      </div>
+    </form>      
+  </dialog>
+
   <div id="grid-container">
 
     <div class="top-bar"> 
@@ -32,19 +45,13 @@
           <div>Inbox</div>
         </div>
         <div class="projects-container">
-          <h2>Projects</h2>
-          <ul class="project-list">
-            <li>
-              <div class="project-item">
-                <svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg>
-                <div>Project name goes here</div>
-              </div>
-            </li>
-          </ul>
-          <button class="add-project-btn">
-            <svg width="13" height="13"><path d="M6 6V.5a.5.5 0 011 0V6h5.5a.5.5 0 110 1H7v5.5a.5.5 0 11-1 0V7H.5a.5.5 0 010-1H6z" fill="currentColor" fill-rule="evenodd"></path></svg>
-            <div>Add project</div>
-          </button>
+          <div class="projects-header">
+            <h2>Projects</h2>
+            <button class="add-project-btn">
+              <svg width="13" height="13"><path d="M6 6V.5a.5.5 0 011 0V6h5.5a.5.5 0 110 1H7v5.5a.5.5 0 11-1 0V7H.5a.5.5 0 010-1H6z" fill="currentColor" fill-rule="evenodd"></path></svg>
+            </button>
+          </div>
+          <ul id="project-list"></ul>
         </div>
       </div>
     </div>
@@ -60,7 +67,7 @@
 
           <div class="form-container">
             <form action="" id="create-task">
-              <input type="text" id="title" placeholder="Title" />
+              <input type="text" id="title" placeholder="Title" required/>
               <textarea id="description" placeholder="Description" ></textarea>
               <div class="form-options">
                 <input type="date" id="due-date" />
@@ -83,10 +90,12 @@
             </form>
           </div>
 
+          
           <button class="add-task-btn">
             <svg width="13" height="13"><path d="M6 6V.5a.5.5 0 011 0V6h5.5a.5.5 0 110 1H7v5.5a.5.5 0 11-1 0V7H.5a.5.5 0 010-1H6z" fill="currentColor" fill-rule="evenodd"></path></svg>
             <div>Add task</div>
           </button>
+          
 
 
         </div>
@@ -94,5 +103,6 @@
     </div>
 
   </div>
+
 </body>
 </html>

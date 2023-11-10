@@ -19,6 +19,7 @@ body {
   color: #E2E2E2;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
   font-size: 14px;
+
 }
 
 ul {
@@ -93,15 +94,11 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.project-list li {
-  margin-bottom: .5rem;
-}
-
 .inbox-option {
   color: #fff;
   padding: 10px 0 10px 8px;
   border-radius: 6px;
-
+  
   display: flex;
   align-items: center;
   gap: .5rem;
@@ -109,6 +106,17 @@ h2 {
 
 .inbox-option:hover {
   background-color: #333333;
+}
+
+.projects-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#project-list li {
+  margin-bottom: .5rem;
 }
 
 .project-item {
@@ -126,7 +134,7 @@ h2 {
 .add-project-btn {
   display: flex;
   gap: .5rem;
-  padding: 8px;
+  padding: 5px 8px;
   border-radius: 4px;
   border: none;
   background-color: rgb(255, 255, 255, .0);
@@ -326,6 +334,11 @@ textarea:focus {
   border-radius: 4px;
 }
 
+.submit-btn {
+  background-color: #DD4B4A;
+  margin-left: .25rem;
+}
+
 select {
   padding: .5rem;
   background-color: rgb(0, 0, 0, .0);
@@ -347,7 +360,58 @@ input[type="date"] {
   filter: invert(45%) hue-rotate(180deg);
 }
 
-.submit-btn {
+
+
+
+/* MODAL */
+
+dialog {
+  background-color: #1E1E1E;
+  border: none;
+  border-radius: 4px;
+  margin: 10rem auto;
+}
+
+#project-title-input {
+  height: 28px;
+  margin-bottom: 1rem;
+  border: 1px solid #3b3b3b;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#create-project-form {
+  border: none;
+  width: 300px;
+}
+
+.add-project-modal-title {
+  color: #fff;
+}
+
+.modal-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  padding-top: 1rem;
+}
+
+.close-modal-btn,
+.add-project-to-list {
+  padding: .5rem 1rem;
+  background-color: #333333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.add-project-to-list {
   background-color: #DD4B4A;
   margin-left: .25rem;
+}
+
+::backdrop {
+  background-color: black;
+  opacity: 0.5;
 }

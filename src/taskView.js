@@ -1,11 +1,40 @@
 // src/taskView.js
 import { 
   getTasksFromLocalStorage, 
+  createProject,
   createTask, 
   deleteTask, 
   toggleTaskComplete, 
   myTasks
 } from './taskService.js';
+
+
+export function displayProjects(projects) {
+  // Get a reference to the project list element
+  const projectList = document.querySelector('#project-list');
+  
+  // Clear the project list
+  projectList.innerHTML = '';
+  
+  // Loop through the tasks and update the list
+  projects.forEach(project => {
+    const projectItem = document.createElement('li');
+    
+    // Set the index number to the data-task-id attribute
+    projectItem.dataset.projectId = project.id;
+    
+    // HTML structure of the new task item
+    projectItem.innerHTML = `
+    <div class="project-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg>
+      <div>${project.title}</div>
+    </div>
+    `;
+    
+    // Add the new task item
+    projectList.appendChild(projectItem);    
+  });
+}
 
 
 export function displayIncompleteTasks(tasks) {
@@ -119,12 +148,31 @@ export function handleCreateTaskFormSubmission() {
 }
 
 
+export function handleCreateProjectFormSubmission() {
+  document.querySelector('#create-project-form').addEventListener('submit', (event) => {
+    console.log('add btn clicked');
+    // Prevent the default form submission behavior
+    event.preventDefault();
+  
+    // Get values from the form fields
+    const title = document.querySelector('#project-title-input').value;
+  
+    // Create a new project and add it to the database
+    createProject(title);
+
+    // Close the modal
+    dialog.close();
+  });
+}
+
+
 export function clearFormFields() {
   const category = document.querySelector('#project').value = 'inbox';
   const title = document.querySelector('#title').value = '';
   const description = document.querySelector('#description').value = '';
   const dueDate = document.querySelector('#due-date').value = '';
   const priority = document.querySelector('#priority').value = 'priority-4';
+  const projectTitle = document.querySelector('#project-title-input').value = '';
 }
 
 
@@ -141,10 +189,24 @@ export function showCreateTaskForm() {
 }
 
 // Change behavior of the return key to programmatically click the 'Add task' btn.
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', (event) => {
   if (event.key === "Enter") {
-      event.preventDefault(); 
-      document.querySelector('.submit-btn').click(); 
+    event.preventDefault(); 
+
+    // Check if add task form is open and visible
+    const addTaskForm = document.querySelector('.form-container');
+    const addTaskSubmitButton = document.querySelector('.submit-btn');
+    
+    // Check if the add project modal is open and visible
+    const addProjectModal = document.querySelector('#add-project-modal');
+    const addProjectSubmitButton = document.querySelector('.add-project-to-list');
+
+    if (getComputedStyle(addTaskForm).display !== 'none') {
+      addTaskSubmitButton.click();
+    } else if (getComputedStyle(addProjectModal).display !== 'none') {
+      addProjectSubmitButton.click();
+      addProjectModal.close();
+    }
   }
 });
 
@@ -213,3 +275,18 @@ export function handleToggleCompletedTasksButton() {
     }
   });
 }
+
+
+// 
+const dialog = document.querySelector('#add-project-modal');
+const showAddProjectModalButton = document.querySelector('.add-project-btn');
+const closeProjectModalButton = document.querySelector('.close-modal-btn');
+
+showAddProjectModalButton.addEventListener('click', () => {
+  dialog.showModal();
+});
+
+closeProjectModalButton.addEventListener('click', () => {
+  dialog.close();
+});
+
