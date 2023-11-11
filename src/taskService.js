@@ -65,9 +65,11 @@ export let categories = [
   },
 ]
 
+
 function updateLocalStorage(categories) {
   localStorage.setItem('taskCategories', JSON.stringify(categories));
 }
+
 
 function getStoredTasks() {
   const storedTasks = localStorage.getItem('taskCategories');
@@ -76,6 +78,7 @@ function getStoredTasks() {
   }
   return [];// Return empty array if nothing in localStorage to avoid error
 }
+
 
 function createCategory(title) {
   const newCategory = {
@@ -87,7 +90,8 @@ function createCategory(title) {
   updateLocalStorage(categories);
 }
 
-function createTask(categoryId, title, description = null, dueDate = null, priority = 'priority-4', isComplete = false) {
+
+function createTask(categoryId, title, description = '', dueDate = '', priority = 'priority-4', isComplete = false) {
   const newTask = {
     id: uuidv4(),
     title: title,
@@ -96,6 +100,7 @@ function createTask(categoryId, title, description = null, dueDate = null, prior
     priority: priority,
     isComplete: isComplete,
   };
+
 
   const category = categories.find(category => category.id === categoryId);
   if (category) {
@@ -106,11 +111,13 @@ function createTask(categoryId, title, description = null, dueDate = null, prior
   }
 }
 
+
 function deleteCategory(categoryId) {
   const updatedCategories = categories.filter(category => category.id !== categoryId);
   categories = updatedCategories;
   updateLocalStorage(categories);
 }
+
 
 function deleteTaskFromCategory(categoryId, taskId) {
   const category = categories.find(category => category.id === categoryId);
@@ -123,6 +130,51 @@ function deleteTaskFromCategory(categoryId, taskId) {
     console.error('Category not found');
   }
 }
+
+
+// Function to update a task
+function editCategory(categoryId, updatedTitle) {
+  const category = categories.find(category => category.id === categoryId);
+  if (category) {
+    category.title = updatedTitle;
+
+    updateLocalStorage(categories);
+  } else {
+    console.error('Category not found');
+  }
+}
+
+
+function editTask(categoryId, taskId, updates) {
+  const category = categories.find(category => category.id === categoryId);
+  if (category) {
+    const task = category.tasks.find(task => task.id === taskId);
+    if (task) {
+      // Iterate over the properties in updates and apply them to the task
+      Object.keys(updates).forEach(key => {
+        if(task.hasOwnProperty(key)) {
+          task[key] = updates[key];
+        }
+      });
+
+      updateLocalStorage(categories);
+    } else {
+      console.error('Task not found');
+    }
+  } else {
+    console.error('Category not found');
+  }
+}
+
+// Place this inside the UI function to handle task edits
+const updates = {
+  title: title, // Make this a requirement in UI code
+  description: description || '',
+  dueDate: dueDate || '',
+  priority: priority || 'priority-4'
+};
+
+
 
 function toggleTaskStatus(categoryId, taskId) {
   const category = categories.find(category => category.id === categoryId);
@@ -150,6 +202,9 @@ function toggleTaskStatus(categoryId, taskId) {
     console.error('Category not found');
   }
 }
+
+
+
 
 // // Set the data structure to store tasks
 // export let myTasks = [
@@ -324,27 +379,3 @@ function toggleTaskStatus(categoryId, taskId) {
 //     console.error('Task not found');
 //   }  
 // }
-
-export function getTaskDetails(taskId) {
-  const tasks = getTasksFromLocalStorage();
-  const task = tasks.find(task => task.id === taskId);
-  return task;
-}
-
-// Function to update a task
-function updateTaskDetails() {
-
-}
-
-export function setPriorityLevel(taskId, selectedPriority) {
-  const selectedTask = myTasks.find(task => task.id === taskId);
-
-  // Update the priority level of the selected task
-  if (selectedTask) {
-    selectedTask.priority = selectedPriority;
-  } else {
-    console.error('Task not found');
-  }
-
-  displayIncompleteTasks();
-}
