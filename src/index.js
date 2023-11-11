@@ -17,6 +17,7 @@ import {
   displayIncompleteTasks, 
   showCreateTaskForm, 
   closeCreateTaskForm, 
+  showEditTaskForm,
   handleCreateTaskFormSubmission, 
   handleCreateProjectFormSubmission,
   attachCheckBoxButtonListeners, 
@@ -28,6 +29,7 @@ import {
 function initializeEventListeners() {
   showCreateTaskForm();
   closeCreateTaskForm();
+  showEditTaskForm();
   handleCreateProjectFormSubmission();
   handleCreateTaskFormSubmission();
   handleToggleCompletedTasksButton();

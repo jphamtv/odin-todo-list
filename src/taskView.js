@@ -5,7 +5,8 @@ import {
   createTask, 
   deleteTask, 
   toggleTaskComplete, 
-  myTasks
+  myTasks,
+  getTaskDetails,
 } from './taskService.js';
 
 
@@ -46,7 +47,7 @@ export function displayIncompleteTasks(tasks) {
   
   // Loop through the tasks and update the list
   tasks.forEach(task => {
-    if (!task.taskComplete) {
+    if (!task.isComplete) {
       const taskItem = document.createElement('li');
       
       // Add task-item class attribute
@@ -66,8 +67,8 @@ export function displayIncompleteTasks(tasks) {
         <div class="task-title-wrapper">
           <div class="title">${task.title}</div>
           <div>
-            <button class="edit-btn" data-task-id="${task.id}">Edit</button>
-            <button class="delete-btn" data-task-id="${task.id}">Delete</button>
+            <button class="edit-btn btn" data-task-id="${task.id}">Edit</button>
+            <button class="delete-btn btn" data-task-id="${task.id}">Delete</button>
           </div>
         </div>
         ${task.description ? `<div class="description">${task.description}</div>` : ''}
@@ -96,15 +97,15 @@ export function displayAllTasks(tasks) {
     taskItem.dataset.taskId = task.id;
     taskItem.innerHTML = `
       <div>
-        <button type="button" class="checkbox-btn${task.taskComplete ? ' checked' : ''}">
-        <svg class="checkmark-icon${task.taskComplete ? ' checked' : ''}" data-task-id="${task.id}" width="24" height="24"><path d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
+        <button type="button" class="checkbox-btn${task.isComplete ? ' checked' : ''}">
+        <svg class="checkmark-icon${task.isComplete ? ' checked' : ''}" data-task-id="${task.id}" width="24" height="24"><path d="M11.23 13.7l-2.15-2a.55.55 0 0 0-.74-.01l.03-.03a.46.46 0 0 0 0 .68L11.24 15l5.4-5.01a.45.45 0 0 0 0-.68l.02.03a.55.55 0 0 0-.73 0l-4.7 4.35z"></path></svg>
         </button>
       </div>
       <div class="task-content">
         <div class="task-title-wrapper">
-          <div class="title${task.taskComplete ? ' checked' : ''}">${task.title}</div>
+          <div class="title${task.isComplete ? ' checked' : ''}">${task.title}</div>
           <div>
-            ${!task.taskComplete ? `<button class="edit-btn" data-task-id="${task.id}">Edit</button>` : ''}
+            ${!task.isComplete ? `<button class="edit-btn" data-task-id="${task.id}">Edit</button>` : ''}
             <button class="delete-btn" data-task-id="${task.id}">Delete</button>
           </div>
         </div>
@@ -116,12 +117,12 @@ export function displayAllTasks(tasks) {
   };
 
   // Display incomplete tasks
-  tasks.filter(task => !task.taskComplete).forEach(task => {
+  tasks.filter(task => !task.isComplete).forEach(task => {
     taskList.appendChild(createTaskItem(task));
   });
 
   // Display completed tasks
-  tasks.filter(task => task.taskComplete).forEach(task => {
+  tasks.filter(task => task.isComplete).forEach(task => {
     taskList.appendChild(createTaskItem(task));
   });
 }
@@ -131,16 +132,18 @@ export function handleCreateTaskFormSubmission() {
   document.querySelector('#create-task').addEventListener('submit', (event) => {
     // Prevent the default form submission behavior
     event.preventDefault();
-  
+    
     // Get values from the form fields
     const category = document.querySelector('#project').value;
     const title = document.querySelector('#title').value;
     const description = document.querySelector('#description').value;
     const dueDate = document.querySelector('#due-date').value;
     const priority = document.querySelector('#priority').value;
-  
+    
     // Create a new task object and add it to the database
     createTask(category, title, description, dueDate, priority);
+    console.log('clicked');
+    console.log(title);
 
     // Refocus the title input field
     document.querySelector('#title').focus(); 
@@ -150,7 +153,6 @@ export function handleCreateTaskFormSubmission() {
 
 export function handleCreateProjectFormSubmission() {
   document.querySelector('#create-project-form').addEventListener('submit', (event) => {
-    console.log('add btn clicked');
     // Prevent the default form submission behavior
     event.preventDefault();
   
@@ -160,19 +162,16 @@ export function handleCreateProjectFormSubmission() {
     // Create a new project and add it to the database
     createProject(title);
 
-    // Close the modal
-    dialog.close();
+    // Clear fields and close the modal
+    clearFormFields();
+    projectDialog.close();
   });
 }
 
-
 export function clearFormFields() {
-  const category = document.querySelector('#project').value = 'inbox';
-  const title = document.querySelector('#title').value = '';
-  const description = document.querySelector('#description').value = '';
-  const dueDate = document.querySelector('#due-date').value = '';
-  const priority = document.querySelector('#priority').value = 'priority-4';
-  const projectTitle = document.querySelector('#project-title-input').value = '';
+  document.querySelector('#create-task').reset();
+  document.querySelector('#create-project-form').reset();
+  document.querySelector('#edit-task').reset();
 }
 
 
@@ -233,7 +232,7 @@ export function attachCheckBoxButtonListeners() {
       // Get the task ID 
       const taskId = event.target.dataset.taskId;
 
-      // Update taskComplete property
+      // Update isComplete property
       toggleTaskComplete(taskId);
     }
   });
@@ -248,7 +247,7 @@ export function attachDeleteButtonListeners() {
       // Get the task ID 
       const taskId = event.target.dataset.taskId;
 
-      // Update taskComplete property
+      // Update isComplete property
       deleteTask(taskId);
     }
   });
@@ -277,16 +276,75 @@ export function handleToggleCompletedTasksButton() {
 }
 
 
-// 
-const dialog = document.querySelector('#add-project-modal');
+// Attach event listeners to show and close project modal
+const projectDialog = document.querySelector('#add-project-modal');
 const showAddProjectModalButton = document.querySelector('.add-project-btn');
 const closeProjectModalButton = document.querySelector('.close-modal-btn');
 
 showAddProjectModalButton.addEventListener('click', () => {
-  dialog.showModal();
+  projectDialog.showModal();
 });
 
-closeProjectModalButton.addEventListener('click', () => {
-  dialog.close();
+closeProjectModalButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  clearFormFields();
+  projectDialog.close();
 });
 
+
+const editTaskDialog = document.querySelector('#edit-task-modal');
+const closeEditTaskModalButton = document.querySelector('.cancel-edit-btn');
+
+closeEditTaskModalButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  editTaskDialog.close();
+});
+
+
+export function showEditTaskForm() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const taskList = document.querySelector('#task-list');
+    taskList.addEventListener('click', (event) => {
+      if (event.target.classList.contains('edit-btn')) {
+        editTaskDialog.showModal();    
+
+        // Get the task ID 
+        const taskId = event.target.dataset.taskId;
+        console.log(taskId);
+        displayTaskDetails(taskId);
+      }
+    });  
+  });
+}
+
+function displayTaskDetails(taskId) {
+  // Get a reference to the task list element
+  const editTaskForm = document.querySelector('#edit-task');
+
+  const task = getTaskDetails(taskId);
+  console.log(task);
+  
+  // Clear the task list
+  editTaskForm.innerHTML = `
+    <input type="text" id="edit-title" placeholder="Title" value="${task.title}" />
+    <textarea id="edit-description" placeholder="Description">${task.description}</textarea>
+    <div class="form-options">
+      <input type="date" id="due-date" value="${task.dueDate}" />
+      <select name="priority" id="priority">
+        <option value="priority-1">Priority 1</option>
+        <option value="priority-2">Priority 2</option>
+        <option value="priority-3">Priority 3</option>
+        <option value="priority-4" selected>Priority 4</option>
+      </select>
+      <select name="project" id="project">
+        <option value="inbox" selected>Inbox</option>
+      </select>
+    </div>
+    <footer class="form-footer">
+      <div class="form-btns">
+        <button class="cancel-edit-btn btn">Cancel</button>
+        <button class="submit-btn" type="submit">Save</button>
+      </div>
+    </footer>
+  `;
+}
