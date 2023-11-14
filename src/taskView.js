@@ -30,17 +30,17 @@ export function renderProjectsList(categories) {
   categories.forEach(category => {
     if (category.id !== 'inbox') {
       const li = document.createElement('li');
+      li.classList.add('project-item');
       li.dataset.categoryId = category.id;
   
-      const categoryItemDiv = document.createElement('div');
-      categoryItemDiv.classList.add('project-item');
+      const categoryItemButton = document.createElement('button');
+      categoryItemButton.classList.add('project-button');
+      categoryItemButton.dataset.categoryId = category.id;
       
-      categoryItemDiv.innerHTML += `<svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg>`
-      const categoryTitleDiv = document.createElement('div');
-      categoryTitleDiv.textContent = category.title;
-      
-      categoryItemDiv.appendChild(categoryTitleDiv);
-      li.appendChild(categoryItemDiv);
+      categoryItemButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg>`
+      const textNode = document.createTextNode(category.title);
+      categoryItemButton.appendChild(textNode);
+      li.appendChild(categoryItemButton);
       projectList.appendChild(li);
     }
   });
@@ -51,6 +51,55 @@ let currentCategoryViewId = 'inbox';
 
 // Initial state for whether completed tasks are shown
 let showCompletedTasks = false;
+
+export function handleInboxCategoryClick() {
+  const inboxOptionElement = document.querySelector('.inbox-button');
+  inboxOptionElement.addEventListener('click', () => {
+    const categoryId = inboxOptionElement.dataset.categoryId;
+    const category = categories.find(category => category.id === categoryId);
+    const categoryHeaderTitle = document.querySelector('.category-title');
+
+    if (currentCategoryViewId !== categoryId) {
+      currentCategoryViewId = categoryId;
+      categoryHeaderTitle.textContent = category.title;
+
+      document.querySelectorAll('.project-button').forEach(button => {
+        button.classList.remove('current');
+      });
+
+      inboxOptionElement.classList.add('current');
+
+      renderIncompleteTasks(categoryId, categories);
+    }
+  });
+}
+
+export function handleProjectCategoryClick() {
+  const projectListElement = document.querySelector('#project-list');
+  projectListElement.addEventListener('click', (event) => {
+    
+    if (event.target.classList.contains('project-button')) {
+      const categoryId = event.target.dataset.categoryId;
+      const category = categories.find(category => category.id === categoryId);
+      const categoryHeaderTitle = document.querySelector('.category-title');
+
+      if (currentCategoryViewId !== categoryId) {
+        currentCategoryViewId = categoryId;
+        categoryHeaderTitle.textContent = category.title;
+
+        document.querySelectorAll('.project-button').forEach(button => {
+          button.classList.remove('current');
+        });
+
+        document.querySelector('.inbox-button').classList.remove('current');
+
+        event.target.classList.add('current');
+
+        renderIncompleteTasks(categoryId, categories);
+      }
+    }
+  });
+}
 
 
 export function renderIncompleteTasks(categoryId, categories) {
@@ -165,7 +214,6 @@ function createButton(text, className, taskId) {
 }
 
 
-
 export function handleCreateTaskFormSubmission() {
   document.querySelector('#create-task').addEventListener('submit', (event) => {
     // Prevent the default form submission behavior
@@ -262,7 +310,7 @@ export function closeCreateTaskForm() {
 }
 
 
-export function handleCheckBoxClicks() {
+export function handleCheckBoxClick() {
   const taskListElement = document.querySelector('#task-list');
   taskListElement.addEventListener('click', (event) => {
     if (event.target.classList.contains('checkmark-icon')) {
@@ -286,7 +334,7 @@ export function handleCheckBoxClicks() {
 }
 
 
-export function handleDeleteButtonClicks() {
+export function handleDeleteButtonClick() {
   const taskListElement = document.querySelector('#task-list');
   taskListElement.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-btn')) {
@@ -314,12 +362,10 @@ export function handleDeleteButtonClicks() {
 const toggleCompletedTasksBtn = document.querySelector('.toggle-completed-tasks-btn');
 
 
-
-export function handleToggleCompletedTasksButtonClicks() {
+export function handleToggleCompletedTasksButtonClick() {
   toggleCompletedTasksBtn.addEventListener('click', () => {
     const categoryId = currentCategoryViewId;
     showCompletedTasks = !showCompletedTasks;
-    console.log(showCompletedTasks);
     if (showCompletedTasks) {
       renderAllTasks(categoryId, categories);
       toggleCompletedTasksBtn.textContent = 'Hide completed tasks';
@@ -345,7 +391,6 @@ closeProjectModalButton.addEventListener('click', (event) => {
   clearFormFields();
   projectDialog.close();
 });
-
 
 const editTaskDialog = document.querySelector('#edit-task-modal');
 const closeEditTaskModalButton = document.querySelector('.cancel-edit-btn');

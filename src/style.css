@@ -41,7 +41,7 @@ ul {
   cursor: pointer;
 }
 
-.current {
+button.current {
   background-color: #333333;
 }
 
@@ -101,26 +101,26 @@ ul {
   margin: 2.5rem 1.5rem 0 2rem;
 }
 
-.inbox-option {
-  margin-bottom: 2rem;
-}
-
 h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
 }
 
-.inbox-option {
+.inbox-button {
+  background-color: rgb(0, 0, 0, .0);
   color: #fff;
   padding: 10px 0 10px 8px;
   border-radius: 6px;
+  border: none;
+  margin-bottom: 2rem;
+  width: 100%;
   
   display: flex;
   align-items: center;
   gap: .5rem;
 }
 
-.inbox-option:hover {
+.inbox-button:hover {
   background-color: #333333;
   cursor: pointer;
 }
@@ -136,15 +136,20 @@ h2 {
   margin-bottom: .5rem;
 }
 
-.project-item {
+.project-button {
+  background-color: rgb(0, 0, 0, .0);
+  color: #fff;
+  width: 100%;
+
   display: flex;
   align-items: center;
-  gap: .25rem;
+  gap: .5rem;
   padding: 10px 0 10px 8px;
   border-radius: 6px;
+  border: none;
 }
 
-.project-item:hover {
+.project-button:hover {
   background-color: #333333;
   cursor: pointer;
 }
