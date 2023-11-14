@@ -69,7 +69,8 @@ export function handleInboxCategoryClick() {
 
       inboxOptionElement.classList.add('current');
 
-      renderIncompleteTasks(categoryId, categories);
+      // renderIncompleteTasks(categoryId, categories);
+      renderTasks(categoryId, categories);
     }
   });
 }
@@ -95,29 +96,54 @@ export function handleProjectCategoryClick() {
 
         event.target.classList.add('current');
 
-        renderIncompleteTasks(categoryId, categories);
+        // renderIncompleteTasks(categoryId, categories);
+        renderTasks(categoryId, categories);
       }
     }
   });
 }
 
 
-export function renderIncompleteTasks(categoryId, categories) {
-  const category = categories.find(category => category.id === categoryId);
+// export function renderIncompleteTasks(categoryId, categories) {
+//   const category = categories.find(category => category.id === categoryId);
 
-  if (category) {
-    const taskList = document.querySelector('#task-list');
-    taskList.innerHTML = '';
+//   if (category) {
+//     const taskList = document.querySelector('#task-list');
+//     taskList.innerHTML = '';
 
-    // Display incomplete tasks
-    category.tasks.filter(task => !task.isComplete).forEach(task => {
-      const taskItem = createTaskItemElement(task);
-      taskList.appendChild(taskItem);
-    });
-  }
-}
+//     // Display incomplete tasks
+//     category.tasks.filter(task => !task.isComplete).forEach(task => {
+//       const taskItem = createTaskItemElement(task);
+//       taskList.appendChild(taskItem);
+//     });
+//   }
+// }
 
-export function renderAllTasks(categoryId, categories) {
+// export function renderAllTasks(categoryId, categories) {
+//   const category = categories.find(category => category.id === categoryId);
+//   if (category) {
+//     // Get a reference to the task list element
+//     const taskList = document.querySelector('#task-list');
+    
+//     // Clear the task list
+//     taskList.innerHTML = '';
+    
+//     // Display incomplete tasks
+//     category.tasks.filter(task => !task.isComplete).forEach(task => {
+//       const taskItem = createTaskItemElement(task);
+//       taskList.appendChild(taskItem);
+//     });
+  
+//     // Display completed tasks
+//     category.tasks.filter(task => task.isComplete).forEach(task => {
+//       const taskItem = createTaskItemElement(task);
+//       taskList.appendChild(taskItem);
+//     });
+//   }
+// }
+
+
+export function renderTasks(categoryId, categories) {
   const category = categories.find(category => category.id === categoryId);
   if (category) {
     // Get a reference to the task list element
@@ -125,18 +151,26 @@ export function renderAllTasks(categoryId, categories) {
     
     // Clear the task list
     taskList.innerHTML = '';
-    
-    // Display incomplete tasks
-    category.tasks.filter(task => !task.isComplete).forEach(task => {
-      const taskItem = createTaskItemElement(task);
-      taskList.appendChild(taskItem);
-    });
-  
-    // Display completed tasks
-    category.tasks.filter(task => task.isComplete).forEach(task => {
-      const taskItem = createTaskItemElement(task);
-      taskList.appendChild(taskItem);
-    });
+
+    if (showCompletedTasks) {
+      // Display incomplete tasks…
+      category.tasks.filter(task => !task.isComplete).forEach(task => {
+        const taskItem = createTaskItemElement(task);
+        taskList.appendChild(taskItem);
+      });    
+      // …then display completed tasks
+      category.tasks.filter(task => task.isComplete).forEach(task => {
+        const taskItem = createTaskItemElement(task);
+        taskList.appendChild(taskItem);
+      });    
+
+    } else {
+      // Display incomplete tasks only
+      category.tasks.filter(task => !task.isComplete).forEach(task => {
+        const taskItem = createTaskItemElement(task);
+        taskList.appendChild(taskItem);
+      });
+    }    
   }
 }
 
@@ -324,11 +358,7 @@ export function handleCheckBoxClick() {
       // Update isComplete property
       toggleTaskStatus(categoryId, taskId);
 
-      if (!showCompletedTasks) {
-        renderIncompleteTasks(categoryId, categories);
-      } else {
-        renderAllTasks(categoryId, categories);
-      }
+      renderTasks(categoryId, categories);
     }
   });
 }
@@ -348,11 +378,7 @@ export function handleDeleteButtonClick() {
       // Update isComplete property
       deleteTaskFromCategory(categoryId, taskId);
 
-      if (!showCompletedTasks) {
-        renderIncompleteTasks(categoryId, categories);
-      } else {
-        renderAllTasks(categoryId, categories);
-      }
+      renderTasks(categoryId, categories);
     }
   });
 }
@@ -367,12 +393,11 @@ export function handleToggleCompletedTasksButtonClick() {
     const categoryId = currentCategoryViewId;
     showCompletedTasks = !showCompletedTasks;
     if (showCompletedTasks) {
-      renderAllTasks(categoryId, categories);
       toggleCompletedTasksBtn.textContent = 'Hide completed tasks';
     } else {
-      renderIncompleteTasks(categoryId, categories);
       toggleCompletedTasksBtn.textContent = 'Show completed tasks';
     }
+    renderTasks(categoryId, categories);
   });
 }
 

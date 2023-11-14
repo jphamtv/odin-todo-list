@@ -14,7 +14,8 @@ import './style.css';
 
 
 import { 
-  renderIncompleteTasks, 
+  // renderIncompleteTasks, 
+  renderTasks,
   renderProjectsList, 
   handleCheckBoxClick,
   handleDeleteButtonClick,
@@ -58,7 +59,8 @@ function initializeApp() {
   updateCategories(storedTasks);
 
   renderProjectsList(storedTasks);
-  renderIncompleteTasks('inbox', storedTasks);
+  // renderIncompleteTasks('inbox', storedTasks);
+  renderTasks('inbox', storedTasks);
   initializeEventListeners();
 }
 
