@@ -27,7 +27,7 @@ export function createCategory(title) {
 }
 
 
-export function createTask(categoryId, title, description = '', dueDate = '', priority = 'priority-4', isComplete = false) {
+export function createTask(categoryId, title, description = '', dueDate = '', priority = 'low', isComplete = false) {
   const newTask = {
     id: uuidv4(),
     title: title,
@@ -102,15 +102,6 @@ export function editTask(categoryId, taskId, updates) {
   }
 }
 
-// // Place this inside the UI function to handle task edits
-// const updates = {
-//   title: title, // Make this a requirement in UI code
-//   description: description || '',
-//   dueDate: dueDate || '',
-//   priority: priority || 'priority-4'
-// };
-
-
 
 export function toggleTaskStatus(categoryId, taskId) {
   const category = categories.find(category => category.id === categoryId);
@@ -138,81 +129,3 @@ export function toggleTaskStatus(categoryId, taskId) {
   }
 }
 
-
-// // Function to create projects
-// class Project {
-//   constructor(id, title) {
-//     this.id = id;
-//     this.title = title;
-//   }
-// }
-
-// // Function to create tasks
-// class Task {
-//   constructor(id, category, title, description, dueDate, priority, isComplete = false) {
-//     this.id = id;
-//     this.category = category;
-//     this.title = title;
-//     this.description = description;
-//     this.dueDate = dueDate;
-//     this.priority = priority;
-//     this.isComplete = isComplete;
-//   }
-// }
-
-/* CREATE LOGIC */
-
-// export function createTask(category, title, description, dueDate, priority, isComplete) {
-//   // Generate unique ID for the task
-//   const id = uuidv4();
-
-//   // Create a new task using the Task class
-//   const task = new Task(id, category, title, description, dueDate, priority, isComplete);
-
-//   myTasks.push(task)
-//   saveTasksToLocalStorage(myTasks);
-
-//   // Update the UI
-//   displayIncompleteTasks(myTasks);
-
-//   // Clear the form fields
-//   clearFormFields();
-// }
-
-
-/* DELETE LOGIC */
-
-// // Function to delete tasks by their unique ID
-// export function deleteTask(taskId) {
-//   const tasks = getTasksFromLocalStorage();
-//   const updatedTasks = tasks.filter(task => task.id !== taskId);
-//   saveTasksToLocalStorage(updatedTasks);
-//   updateMyTasks(updatedTasks);
-
-//   if (!showCompletedTasks) {
-//     displayIncompleteTasks(updatedTasks);
-//   } else {
-//     displayAllTasks(updatedTasks);
-//   }
-// }
-
-
-// export function toggleTaskComplete(taskId) {
-//   // Operate on the latest tasks array from localStorage
-//   const tasks = getTasksFromLocalStorage();
-//   const taskIndex = tasks.findIndex(task => task.id === taskId);
-
-//   if (taskIndex !== -1 && tasks[taskIndex].isComplete === false) {
-//     tasks[taskIndex].isComplete = true;  
-//     saveTasksToLocalStorage(tasks);
-//     displayIncompleteTasks(tasks);
-
-//   } else if (taskIndex !== -1 && tasks[taskIndex].isComplete === true) {
-//     tasks[taskIndex].isComplete = false;
-//     saveTasksToLocalStorage(tasks);
-//     displayAllTasks(tasks);
-//   }  
-//     else {
-//     console.error('Task not found');
-//   }  
-// }

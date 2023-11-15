@@ -1,17 +1,5 @@
 // src/index.js
-
 import './style.css';
-// import { 
-//   updateMyTasks,
-//   myTasks, 
-//   getTasksFromLocalStorage, 
-//   saveTasksToLocalStorage,
-//   getProjectsFromLocalStorage,
-//   saveProjectsToLocalStorage,
-//   myProjects,
-//   updateMyProjects, 
-// } from './taskService';
-
 
 import { 
   renderTasks,
@@ -23,8 +11,10 @@ import {
   handleProjectCategoryClick,
   handleCreateTaskFormSubmission,
   handleCreateProjectFormSubmission,
+  handleEditTaskFormSubmission,
   showCreateTaskForm,
   closeCreateTaskForm,
+  showEditTaskForm,
 } from './taskView.js';
 
 import { 
@@ -38,7 +28,7 @@ import {
 function initializeEventListeners() {
   showCreateTaskForm();
   closeCreateTaskForm();
-//   showEditTaskForm();
+  showEditTaskForm();
   handleCreateProjectFormSubmission();
   handleCreateTaskFormSubmission();
   handleToggleCompletedTasksButtonClick();
@@ -46,6 +36,7 @@ function initializeEventListeners() {
   handleDeleteButtonClick(); // Comment out if issues and uncomment below
   handleInboxCategoryClick();
   handleProjectCategoryClick();
+  handleEditTaskFormSubmission();
 }
 
 function initializeApp() {

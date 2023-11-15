@@ -25,32 +25,31 @@
     </form>      
   </dialog>
 
-  <!-- <dialog id="edit-task-modal">
-    <div class="form-container-modal">
+  <dialog id="edit-task-modal">
+    <div class="edit-form-container">
       <form action="" id="edit-task">
+        <input type="hidden" id="task-id" name="task-id">
         <input type="text" id="edit-title" placeholder="Title"/>
         <textarea id="edit-description" placeholder="Description"></textarea>
         <div class="form-options">
-          <input type="date" id="due-date" />
-          <select name="priority" id="priority">
-            <option value="priority-1">Priority 1</option>
-            <option value="priority-2">Priority 2</option>
-            <option value="priority-3">Priority 3</option>
-            <option value="priority-4" selected>Priority 4</option>
+          <input type="date" id="edit-due-date" />
+          <select name="priority-drop-down" class="priority-drop-down">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
           </select>
-          <select name="project" id="project">
-            <option value="inbox" selected>Inbox</option>
+          <select name="project-drop-down" class="project-drop-down">
           </select>
         </div>
-        <footer class="form-footer">
+        <footer class="edit-form-footer">
           <div class="form-btns">
             <button class="cancel-edit-btn btn">Cancel</button>
-            <button class="submit-btn" type="submit">Save</button>
+            <button class="save-btn" type="submit">Save</button>
           </div>
         </footer>
       </form>
     </div>
-  </dialog> -->
+  </dialog>
 
   <div id="grid-container">
 
@@ -98,15 +97,14 @@
               <textarea id="description" placeholder="Description" ></textarea>
               <div class="form-options">
                 <input type="date" id="due-date" />
-                <select name="priority" id="priority">
-                  <option value="priority-1">Priority 1</option>
-                  <option value="priority-2">Priority 2</option>
-                  <option value="priority-3">Priority 3</option>
-                  <option value="priority-4" selected>Priority 4</option>
+                <select name="priority-drop-down" class="priority-drop-down">
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
                 </select>
               </div>
               <footer class="form-footer">
-                <select name="project" id="project">
+                <select name="project-drop-down" class="project-drop-down">
                   <option value="inbox" selected>Inbox</option>
                 </select>
                 <div class="form-btns">

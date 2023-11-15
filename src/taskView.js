@@ -1,14 +1,4 @@
 // src/taskView.js
-// import { 
-//   getTasksFromLocalStorage, 
-//   createProject,
-//   createTask, 
-//   deleteTask, 
-//   toggleTaskComplete, 
-//   myTasks,
-//   getTaskDetails,
-// } from './taskService.js';
-
 import {
   createCategory,
   createTask,
@@ -235,12 +225,14 @@ export function handleCreateTaskFormSubmission() {
     // Set the category ID to the current view
     const categoryId = currentCategoryViewId;
     
+    // Reference to the form for scope
+    const form = event.currentTarget;
+
     // Get values from the form fields
-    const category = document.querySelector('#project').value;
-    const title = document.querySelector('#title').value;
-    const description = document.querySelector('#description').value;
-    const dueDate = document.querySelector('#due-date').value;
-    const priority = document.querySelector('#priority').value;
+    const title = form.querySelector('#title').value;
+    const description = form.querySelector('#description').value;
+    const dueDate = form.querySelector('#due-date').value;
+    const priority = form.querySelector('.priority-drop-down').value;
     
     // Create a new task object and add it to the database
     createTask(categoryId, title, description, dueDate, priority);
@@ -249,7 +241,7 @@ export function handleCreateTaskFormSubmission() {
     renderTasks(categoryId, categories);
 
     // Refocus the title input field
-    document.querySelector('#title').focus(); 
+    form.querySelector('#title').focus(); 
   });
 }
 
@@ -276,7 +268,7 @@ export function handleCreateProjectFormSubmission() {
 export function clearFormFields() {
   document.querySelector('#create-task').reset();
   document.querySelector('#create-project-form').reset();
-  // document.querySelector('#edit-task').reset();
+  document.querySelector('#edit-task').reset();
 }
 
 
@@ -306,7 +298,7 @@ export function closeCreateTaskForm() {
   });
 }
 
-// Change behavior of the return key to programmatically click the 'Add task' btn.
+// Change behavior of the return key to programmatically click the 'submit' btn.
 document.addEventListener('keydown', (event) => {
   if (event.key === "Enter") {
     event.preventDefault(); 
@@ -314,6 +306,10 @@ document.addEventListener('keydown', (event) => {
     // Check if add task form is open and visible
     const addTaskForm = document.querySelector('.form-container');
     const addTaskSubmitButton = document.querySelector('.submit-btn');
+
+    // Check if edit task form is open and visible
+    const editTaskModal = document.querySelector('#edit-task-modal');
+    const editTaskSubmitButton = document.querySelector('.save-btn');
     
     // Check if the add project modal is open and visible
     const addProjectModal = document.querySelector('#add-project-modal');
@@ -324,6 +320,9 @@ document.addEventListener('keydown', (event) => {
     } else if (getComputedStyle(addProjectModal).display !== 'none') {
       addProjectSubmitButton.click();
       addProjectModal.close();
+    } else if (getComputedStyle(editTaskModal).display !== 'none') {
+      editTaskSubmitButton.click();
+      editTaskModal.close();
     }
   }
 });
@@ -402,10 +401,10 @@ closeProjectModalButton.addEventListener('click', (event) => {
 const editTaskDialog = document.querySelector('#edit-task-modal');
 const closeEditTaskModalButton = document.querySelector('.cancel-edit-btn');
 
-// closeEditTaskModalButton.addEventListener('click', (event) => {
-//   event.preventDefault();
-//   editTaskDialog.close();
-// });
+closeEditTaskModalButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  editTaskDialog.close();
+});
 
 
 export function showEditTaskForm() {
@@ -413,43 +412,76 @@ export function showEditTaskForm() {
     const taskList = document.querySelector('#task-list');
     taskList.addEventListener('click', (event) => {
       if (event.target.classList.contains('edit-btn')) {
-        editTaskDialog.showModal();    
+        editTaskDialog.showModal(); 
+        
+        // Get the category ID
+        const categoryId = currentCategoryViewId;
 
         // Get the task ID 
         const taskId = event.target.dataset.taskId;
-        displayTaskDetails(taskId);
+        clearFormFields();
+        displayTaskDetailsForEditing(categoryId, taskId);
       }
     });  
   });
 }
 
-function displayTaskDetails(taskId) {
-  // Get a reference to the task list element
-  const editTaskForm = document.querySelector('#edit-task');
-
-  const task = getTaskDetails(taskId);
+function displayTaskDetailsForEditing(categoryId, taskId) {
+  const category = categories.find(category => category.id === categoryId);
+  const task = category.tasks.find(task => task.id === taskId);
+  const categoryDropDownButton = document.querySelector('.project-drop-down');
   
-  // Clear the task list
-  editTaskForm.innerHTML = `
-    <input type="text" id="edit-title" placeholder="Title" value="${task.title}" />
-    <textarea id="edit-description" placeholder="Description">${task.description}</textarea>
-    <div class="form-options">
-      <input type="date" id="due-date" value="${task.dueDate}" />
-      <select name="priority" id="priority">
-        <option value="priority-1">Priority 1</option>
-        <option value="priority-2">Priority 2</option>
-        <option value="priority-3">Priority 3</option>
-        <option value="priority-4" selected>Priority 4</option>
-      </select>
-      <select name="project" id="project">
-        <option value="inbox" selected>Inbox</option>
-      </select>
-    </div>
-    <footer class="form-footer">
-      <div class="form-btns">
-        <button class="cancel-edit-btn btn">Cancel</button>
-        <button class="submit-btn" type="submit">Save</button>
-      </div>
-    </footer>
-  `;
+  document.querySelector('#task-id').value = task.id;
+  document.querySelector('#edit-title').value = task.title;
+  document.querySelector('#edit-description').textContent = task.description;
+  document.querySelector('#edit-due-date').value = task.dueDate;
+  document.querySelector(`.priority-drop-down option[value='${task.priority}']`).selected = true;
+  
+  categoryDropDownButton.innerHTML = '';
+  categories.forEach(category => {
+    const categoryOption = document.createElement('option');
+    categoryOption.setAttribute('value', category.id);
+    categoryOption.textContent = category.title;
+
+    categoryDropDownButton.appendChild(categoryOption);
+  });
+
+  document.querySelector(`.project-drop-down option[value='${category.id}']`).selected = true;
+}
+
+export function handleEditTaskFormSubmission() {
+  document.querySelector('#edit-task').addEventListener('submit', (event) => {
+    // Prevent the default form submission behavior
+    event.preventDefault();    
+    
+    // Reference to the form for scope
+    const form = event.currentTarget;
+    
+    // Get values from the form fields
+    const categoryId = form.querySelector('.project-drop-down').value;
+    const taskId = form.querySelector('#task-id').value;
+    const title = form.querySelector('#edit-title').value;
+    const description = form.querySelector('#edit-description').value;
+    const dueDate = form.querySelector('#edit-due-date').value;
+    const priority = form.querySelector('.priority-drop-down').value;
+
+    const updates = {
+      title: title, // Make this a requirement in UI code
+      description: description || '',
+      dueDate: dueDate || '',
+      priority: priority || 'low'
+    };
+
+    console.log(categoryId);
+    console.log(taskId);
+    console.log(updates);
+    
+    // Edit the task and close the form
+    editTask(categoryId, taskId, updates);
+    
+    editTaskDialog.close();
+    clearFormFields();
+
+    renderTasks(categoryId, categories);
+  });
 }
