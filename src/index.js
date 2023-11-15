@@ -14,7 +14,6 @@ import './style.css';
 
 
 import { 
-  // renderIncompleteTasks, 
   renderTasks,
   renderProjectsList, 
   handleCheckBoxClick,
@@ -22,6 +21,10 @@ import {
   handleToggleCompletedTasksButtonClick,
   handleInboxCategoryClick,
   handleProjectCategoryClick,
+  handleCreateTaskFormSubmission,
+  handleCreateProjectFormSubmission,
+  showCreateTaskForm,
+  closeCreateTaskForm,
 } from './taskView.js';
 
 import { 
@@ -33,11 +36,11 @@ import {
 
 
 function initializeEventListeners() {
-//   showCreateTaskForm();
-//   closeCreateTaskForm();
+  showCreateTaskForm();
+  closeCreateTaskForm();
 //   showEditTaskForm();
-//   handleCreateProjectFormSubmission();
-//   handleCreateTaskFormSubmission();
+  handleCreateProjectFormSubmission();
+  handleCreateTaskFormSubmission();
   handleToggleCompletedTasksButtonClick();
   handleCheckBoxClick(); // Comment out if issues and uncomment below
   handleDeleteButtonClick(); // Comment out if issues and uncomment below

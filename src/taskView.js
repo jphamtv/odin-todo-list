@@ -69,6 +69,15 @@ export function handleInboxCategoryClick() {
 
       inboxOptionElement.classList.add('current');
 
+      // Close the create task form
+      const createTaskFormElement = document.querySelector('.form-container');
+      const addTaskButton = document.querySelector('.add-task-btn');
+      if (getComputedStyle(createTaskFormElement).display !== 'flex') {
+        createTaskFormElement.style.display = 'none';
+        addTaskButton.style.display = 'flex';
+        clearFormFields();
+      } 
+
       // renderIncompleteTasks(categoryId, categories);
       renderTasks(categoryId, categories);
     }
@@ -96,51 +105,21 @@ export function handleProjectCategoryClick() {
 
         event.target.classList.add('current');
 
+        // Close the create task form
+        const createTaskFormElement = document.querySelector('.form-container');
+        const addTaskButton = document.querySelector('.add-task-btn');
+        if (getComputedStyle(createTaskFormElement).display !== 'flex') {
+          createTaskFormElement.style.display = 'none';
+          addTaskButton.style.display = 'flex';
+          clearFormFields();
+        } 
+
         // renderIncompleteTasks(categoryId, categories);
         renderTasks(categoryId, categories);
       }
     }
   });
 }
-
-
-// export function renderIncompleteTasks(categoryId, categories) {
-//   const category = categories.find(category => category.id === categoryId);
-
-//   if (category) {
-//     const taskList = document.querySelector('#task-list');
-//     taskList.innerHTML = '';
-
-//     // Display incomplete tasks
-//     category.tasks.filter(task => !task.isComplete).forEach(task => {
-//       const taskItem = createTaskItemElement(task);
-//       taskList.appendChild(taskItem);
-//     });
-//   }
-// }
-
-// export function renderAllTasks(categoryId, categories) {
-//   const category = categories.find(category => category.id === categoryId);
-//   if (category) {
-//     // Get a reference to the task list element
-//     const taskList = document.querySelector('#task-list');
-    
-//     // Clear the task list
-//     taskList.innerHTML = '';
-    
-//     // Display incomplete tasks
-//     category.tasks.filter(task => !task.isComplete).forEach(task => {
-//       const taskItem = createTaskItemElement(task);
-//       taskList.appendChild(taskItem);
-//     });
-  
-//     // Display completed tasks
-//     category.tasks.filter(task => task.isComplete).forEach(task => {
-//       const taskItem = createTaskItemElement(task);
-//       taskList.appendChild(taskItem);
-//     });
-//   }
-// }
 
 
 export function renderTasks(categoryId, categories) {
@@ -253,6 +232,9 @@ export function handleCreateTaskFormSubmission() {
     // Prevent the default form submission behavior
     event.preventDefault();
     
+    // Set the category ID to the current view
+    const categoryId = currentCategoryViewId;
+    
     // Get values from the form fields
     const category = document.querySelector('#project').value;
     const title = document.querySelector('#title').value;
@@ -261,9 +243,10 @@ export function handleCreateTaskFormSubmission() {
     const priority = document.querySelector('#priority').value;
     
     // Create a new task object and add it to the database
-    createTask(category, title, description, dueDate, priority);
-    console.log('clicked');
-    console.log(title);
+    createTask(categoryId, title, description, dueDate, priority);
+    clearFormFields();
+
+    renderTasks(categoryId, categories);
 
     // Refocus the title input field
     document.querySelector('#title').focus(); 
@@ -280,7 +263,9 @@ export function handleCreateProjectFormSubmission() {
     const title = document.querySelector('#project-title-input').value;
   
     // Create a new project and add it to the database
-    createProject(title);
+    createCategory(title);
+
+    renderProjectsList(categories);
 
     // Clear fields and close the modal
     clearFormFields();
@@ -291,7 +276,7 @@ export function handleCreateProjectFormSubmission() {
 export function clearFormFields() {
   document.querySelector('#create-task').reset();
   document.querySelector('#create-project-form').reset();
-  document.querySelector('#edit-task').reset();
+  // document.querySelector('#edit-task').reset();
 }
 
 
@@ -303,6 +288,20 @@ export function showCreateTaskForm() {
       createTaskFormElement.style.display = 'block';
       document.querySelector('#title').focus(); 
       addTaskButton.style.display = 'none';
+    });  
+  });
+}
+
+
+export function closeCreateTaskForm() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const createTaskFormElement = document.querySelector('.form-container');
+    const addTaskButton = document.querySelector('.add-task-btn');
+    document.querySelector('.cancel-btn').addEventListener('click', (event) => {
+      event.preventDefault();
+      clearFormFields();
+      createTaskFormElement.style.display = 'none';
+      addTaskButton.style.display = 'flex';
     });  
   });
 }
@@ -320,7 +319,7 @@ document.addEventListener('keydown', (event) => {
     const addProjectModal = document.querySelector('#add-project-modal');
     const addProjectSubmitButton = document.querySelector('.add-project-to-list');
 
-    if (getComputedStyle(addTaskForm).display !== 'none') {
+    if (getComputedStyle(addTaskForm).display !== 'none' && getComputedStyle(addProjectModal).display === 'none') {
       addTaskSubmitButton.click();
     } else if (getComputedStyle(addProjectModal).display !== 'none') {
       addProjectSubmitButton.click();
@@ -328,20 +327,6 @@ document.addEventListener('keydown', (event) => {
     }
   }
 });
-
-
-export function closeCreateTaskForm() {
-  document.addEventListener('DOMContentLoaded', () => {
-    const createTaskFormElement = document.querySelector('.form-container');
-    const addTaskButton = document.querySelector('.add-task-btn');
-    document.querySelector('.cancel-btn').addEventListener('click', (event) => {
-      event.preventDefault();
-      clearFormFields();
-      createTaskFormElement.style.display = 'none';
-      addTaskButton.style.display = 'flex';
-    });  
-  });
-}
 
 
 export function handleCheckBoxClick() {
@@ -384,11 +369,8 @@ export function handleDeleteButtonClick() {
 }
 
 
-// Single button for toggling the display of completed tasks
-const toggleCompletedTasksBtn = document.querySelector('.toggle-completed-tasks-btn');
-
-
 export function handleToggleCompletedTasksButtonClick() {
+  const toggleCompletedTasksBtn = document.querySelector('.toggle-completed-tasks-btn');
   toggleCompletedTasksBtn.addEventListener('click', () => {
     const categoryId = currentCategoryViewId;
     showCompletedTasks = !showCompletedTasks;
@@ -420,10 +402,10 @@ closeProjectModalButton.addEventListener('click', (event) => {
 const editTaskDialog = document.querySelector('#edit-task-modal');
 const closeEditTaskModalButton = document.querySelector('.cancel-edit-btn');
 
-closeEditTaskModalButton.addEventListener('click', (event) => {
-  event.preventDefault();
-  editTaskDialog.close();
-});
+// closeEditTaskModalButton.addEventListener('click', (event) => {
+//   event.preventDefault();
+//   editTaskDialog.close();
+// });
 
 
 export function showEditTaskForm() {
@@ -435,7 +417,6 @@ export function showEditTaskForm() {
 
         // Get the task ID 
         const taskId = event.target.dataset.taskId;
-        console.log(taskId);
         displayTaskDetails(taskId);
       }
     });  
@@ -447,7 +428,6 @@ function displayTaskDetails(taskId) {
   const editTaskForm = document.querySelector('#edit-task');
 
   const task = getTaskDetails(taskId);
-  console.log(task);
   
   // Clear the task list
   editTaskForm.innerHTML = `

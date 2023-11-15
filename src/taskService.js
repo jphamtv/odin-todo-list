@@ -36,10 +36,11 @@ export function createTask(categoryId, title, description = '', dueDate = '', pr
     priority: priority,
     isComplete: isComplete,
   };
-
+  
+  console.log(newTask);
   const category = categories.find(category => category.id === categoryId);
   if (category) {
-    categories.tasks.push(newTask);
+    category.tasks.push(newTask);
     updateLocalStorage(categories);  
   } else {
     console.error('Category not found');
