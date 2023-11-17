@@ -10,6 +10,13 @@ import {
 } from './taskService.js';
 import { categories } from './utils.js';
 
+// Initial state for category view
+let currentCategoryViewId = 'inbox';
+
+// Initial state for whether completed tasks are shown
+let showCompletedTasks = false;
+
+
 export function renderProjectsList(categories) {
   // Get a reference to the project list element
   const projectList = document.querySelector('#project-list');
@@ -26,21 +33,58 @@ export function renderProjectsList(categories) {
       const categoryItemButton = document.createElement('button');
       categoryItemButton.classList.add('project-button');
       categoryItemButton.dataset.categoryId = category.id;
+
+      const moreOptionsMenu = createMoreOptionsMenu(category.id);
       
-      categoryItemButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg>`
       const textNode = document.createTextNode(category.title);
       categoryItemButton.appendChild(textNode);
-      li.appendChild(categoryItemButton);
+      li.append(categoryItemButton, moreOptionsMenu);
       projectList.appendChild(li);
     }
   });
 }
 
-// Initial state for category view
-let currentCategoryViewId = 'inbox';
 
-// Initial state for whether completed tasks are shown
-let showCompletedTasks = false;
+function createMoreOptionsMenu(categoryId) {
+  const moreOptionsMenu = document.createElement('div');
+  moreOptionsMenu.classList.add('more-options-menu');
+  moreOptionsMenu.dataset.categoryId = categoryId;
+
+  const moreOptionsToggle = document.createElement('button');
+  moreOptionsToggle.classList.add('more-options-toggle');
+  moreOptionsToggle.textContent = '•••'
+
+  const moreOptionsContent = document.createElement('div');
+  moreOptionsContent.classList.add('more-options-content');
+
+  const renameOption = document.createElement('button');
+  renameOption.setAttribute('id', 'rename-option');
+  renameOption.dataset.categoryId = categoryId;
+  renameOption.textContent = 'Rename';
+
+  const deleteOption = document.createElement('button');
+  deleteOption.setAttribute('id', 'delete-option');
+  deleteOption.dataset.categoryId = categoryId;
+  deleteOption.textContent = 'Delete';
+
+  moreOptionsContent.append(renameOption, deleteOption);
+  moreOptionsMenu.append(moreOptionsToggle, moreOptionsContent);
+
+  // Event listener to toggle the menu
+  moreOptionsToggle.addEventListener('click', () => {
+    moreOptionsContent.classList.toggle('show');
+  });
+
+  // Event listener to close the menu when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!moreOptionsMenu.contains(event.target) && !moreOptionsToggle.contains(event.target)) {
+      moreOptionsContent.classList.remove('show');
+    }
+  }, true);
+
+  return moreOptionsMenu;
+}
+
 
 export function handleInboxCategoryClick() {
   const inboxOptionElement = document.querySelector('.inbox-button');
@@ -53,8 +97,12 @@ export function handleInboxCategoryClick() {
       currentCategoryViewId = categoryId;
       categoryHeaderTitle.textContent = category.title;
 
-      document.querySelectorAll('.project-button').forEach(button => {
-        button.classList.remove('current');
+      // document.querySelectorAll('.project-button').forEach(button => {
+      //   button.classList.remove('current');
+      // });
+
+      document.querySelectorAll('.project-item').forEach(item => {
+        item.classList.remove('current');
       });
 
       inboxOptionElement.classList.add('current');
@@ -74,6 +122,7 @@ export function handleInboxCategoryClick() {
   });
 }
 
+
 export function handleProjectCategoryClick() {
   const projectListElement = document.querySelector('#project-list');
   projectListElement.addEventListener('click', (event) => {
@@ -85,15 +134,27 @@ export function handleProjectCategoryClick() {
 
       if (currentCategoryViewId !== categoryId) {
         currentCategoryViewId = categoryId;
-        categoryHeaderTitle.textContent = category.title;
+        categoryHeaderTitle.textContent = category.title;    
 
-        document.querySelectorAll('.project-button').forEach(button => {
-          button.classList.remove('current');
+        document.querySelectorAll('.project-item').forEach(item => {
+          item.classList.remove('current');
         });
 
+        // Handle more options dropdown menu
+        document.querySelectorAll('.more-options-menu').forEach(dropdown => {
+          dropdown.classList.remove('show');
+        });
+
+        const moreOptionsMenu = document.querySelector(`.more-options-menu[data-category-id='${categoryId}']`);
+        moreOptionsMenu.classList.add('show');
+        
+
+        // document.querySelector('.project-item').classList.remove('current');
         document.querySelector('.inbox-button').classList.remove('current');
 
-        event.target.classList.add('current');
+        const projectLi = document.querySelector(`.project-item[data-category-id='${categoryId}']`);
+        projectLi.classList.add('current');
+        // event.target.classList.add('current');
 
         // Close the create task form
         const createTaskFormElement = document.querySelector('.form-container');
@@ -103,8 +164,7 @@ export function handleProjectCategoryClick() {
           addTaskButton.style.display = 'flex';
           clearFormFields();
         } 
-
-        // renderIncompleteTasks(categoryId, categories);
+        
         renderTasks(categoryId, categories);
       }
     }
@@ -151,6 +211,7 @@ function createTaskItemElement(task) {
   
   // CHECKBOX ELEMENTS 
   const checkBoxDiv = document.createElement('div');
+  checkBoxDiv.classList.add('checkbox-wrapper');
   const checkBoxButton = document.createElement('button');
   checkBoxButton.classList.add('checkbox-btn');        
   if (task.isComplete) {
@@ -178,9 +239,9 @@ function createTaskItemElement(task) {
   const buttonsDiv = document.createElement('div');
   let editButton = '';
   if (!task.isComplete) {
-    editButton = createButton('Edit', 'edit-btn', task.id);  
+    editButton = createTaskButton('Edit', 'edit-btn', task.id);  
   }              
-  const deleteButton = createButton('Delete', 'delete-btn', task.id);                
+  const deleteButton = createTaskButton('Delete', 'delete-btn', task.id);                
   
   buttonsDiv.append(editButton, deleteButton);
   titleWrapperDiv.append(titleDiv, buttonsDiv);        
@@ -208,7 +269,7 @@ function createTaskItemElement(task) {
 }
 
 
-function createButton(text, className, taskId) {
+function createTaskButton(text, className, taskId) {
   const button = document.createElement('button');
   button.textContent = text;
   button.classList.add(className, 'btn');
@@ -265,6 +326,7 @@ export function handleCreateProjectFormSubmission() {
   });
 }
 
+
 export function clearFormFields() {
   document.querySelector('#create-task').reset();
   document.querySelector('#create-project-form').reset();
@@ -297,6 +359,7 @@ export function closeCreateTaskForm() {
     });  
   });
 }
+
 
 // Change behavior of the return key to programmatically click the 'submit' btn.
 document.addEventListener('keydown', (event) => {
@@ -450,6 +513,7 @@ function displayTaskDetailsForEditing(categoryId, taskId) {
   document.querySelector(`.project-drop-down option[value='${category.id}']`).selected = true;
 }
 
+
 export function handleEditTaskFormSubmission() {
   document.querySelector('#edit-task').addEventListener('submit', (event) => {
     // Prevent the default form submission behavior
@@ -485,5 +549,3 @@ export function handleEditTaskFormSubmission() {
     renderTasks(currentCategoryViewId, categories);
   });
 }
-
-
