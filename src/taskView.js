@@ -426,6 +426,7 @@ export function showEditTaskForm() {
   });
 }
 
+
 function displayTaskDetailsForEditing(categoryId, taskId) {
   const category = categories.find(category => category.id === categoryId);
   const task = category.tasks.find(task => task.id === taskId);
@@ -453,12 +454,12 @@ export function handleEditTaskFormSubmission() {
   document.querySelector('#edit-task').addEventListener('submit', (event) => {
     // Prevent the default form submission behavior
     event.preventDefault();    
-    
+
     // Reference to the form for scope
     const form = event.currentTarget;
     
     // Get values from the form fields
-    const categoryId = form.querySelector('.project-drop-down').value;
+    const selectedCategoryId = form.querySelector('.project-drop-down').value;
     const taskId = form.querySelector('#task-id').value;
     const title = form.querySelector('#edit-title').value;
     const description = form.querySelector('#edit-description').value;
@@ -472,16 +473,17 @@ export function handleEditTaskFormSubmission() {
       priority: priority || 'low'
     };
 
-    console.log(categoryId);
-    console.log(taskId);
-    console.log(updates);
-    
-    // Edit the task and close the form
-    editTask(categoryId, taskId, updates);
+    if (currentCategoryViewId === selectedCategoryId) {
+      editTask(currentCategoryViewId, taskId, updates);      
+    } else if (currentCategoryViewId !== selectedCategoryId) {
+      deleteTaskFromCategory(currentCategoryViewId, taskId);
+      createTask(selectedCategoryId, title, description, dueDate, priority);
+    }
     
     editTaskDialog.close();
-    clearFormFields();
-
-    renderTasks(categoryId, categories);
+    clearFormFields();    
+    renderTasks(currentCategoryViewId, categories);
   });
 }
+
+

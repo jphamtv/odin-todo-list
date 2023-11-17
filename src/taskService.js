@@ -37,7 +37,6 @@ export function createTask(categoryId, title, description = '', dueDate = '', pr
     isComplete: isComplete,
   };
   
-  console.log(newTask);
   const category = categories.find(category => category.id === categoryId);
   if (category) {
     category.tasks.push(newTask);
@@ -79,7 +78,6 @@ export function editCategory(categoryId, updatedTitle) {
     console.error('Category not found');
   }
 }
-
 
 export function editTask(categoryId, taskId, updates) {
   const category = categories.find(category => category.id === categoryId);
