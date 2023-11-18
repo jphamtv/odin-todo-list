@@ -4,15 +4,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { 
   categories,
   updateLocalStorage,
+  updateCategories,
 } from './utils.js';
-
-import { 
-  displayIncompleteTasks, 
-  clearFormFields, 
-  displayAllTasks, 
-  displayProjects,
-  renderIncompleteTasks,
-} from "./taskView.js";
 
 
 export function createCategory(title) {
@@ -49,7 +42,7 @@ export function createTask(categoryId, title, description = '', dueDate = '', pr
 
 export function deleteCategory(categoryId) {
   const updatedCategories = categories.filter(category => category.id !== categoryId);
-  categories = updatedCategories;
+  updateCategories(updatedCategories);
   updateLocalStorage(categories);
 }
 
@@ -67,7 +60,6 @@ export function deleteTaskFromCategory(categoryId, taskId) {
 }
 
 
-// Function to update a task
 export function editCategory(categoryId, updatedTitle) {
   const category = categories.find(category => category.id === categoryId);
   if (category) {
@@ -78,6 +70,7 @@ export function editCategory(categoryId, updatedTitle) {
     console.error('Category not found');
   }
 }
+
 
 export function editTask(categoryId, taskId, updates) {
   const category = categories.find(category => category.id === categoryId);
@@ -126,4 +119,3 @@ export function toggleTaskStatus(categoryId, taskId) {
     console.error('Category not found');
   }
 }
-

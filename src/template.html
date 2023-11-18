@@ -12,6 +12,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">  
 </head>
 <body>
+
+    <!-- Modal for adding a project (initially hidden) -->
   <dialog id="add-project-modal">
     <form action="" id="create-project-form">
       <h2 class="add-project-modal-title">Add project</h2>
@@ -25,6 +27,7 @@
     </form>      
   </dialog>
 
+  <!-- Modal for editing a task (initially hidden) -->
   <dialog id="edit-task-modal">
     <div class="edit-form-container">
       <form action="" id="edit-task">
@@ -50,6 +53,20 @@
       </form>
     </div>
   </dialog>
+
+  <!-- Inline form for renaming (initially hidden) -->
+  <div id="renameForm" style="display: none;">
+    <input type="text" id="newName">
+    <button id="confirmRename">Save</button>
+  </div>
+
+  <!-- Modal for deletion confirmation (initially hidden) -->
+  <div id="deleteModal" style="display: none;">
+    <h2>Delete Project?</h2>
+    <p>This will delete the project and all of its tasks.</p>
+    <button id="cancelDelete">Cancel</button>
+    <button id="confirmDelete">Delete</button>
+  </div>
 
   <div id="grid-container">
 
@@ -91,6 +108,7 @@
         <div class="task-list-container">
           <ul id="task-list"></ul>
 
+          <!-- Inline form for adding a task (initially hidden) -->
           <div class="form-container">
             <form action="" id="create-task">
               <input type="text" id="title" placeholder="Title" required/>
@@ -115,7 +133,6 @@
             </form>
           </div>
 
-          
           <button class="add-task-btn">
             <svg width="13" height="13"><path d="M6 6V.5a.5.5 0 011 0V6h5.5a.5.5 0 110 1H7v5.5a.5.5 0 11-1 0V7H.5a.5.5 0 010-1H6z" fill="currentColor" fill-rule="evenodd"></path></svg>
             <div>Add task</div>

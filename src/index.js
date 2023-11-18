@@ -12,6 +12,7 @@ import {
   handleCreateTaskFormSubmission,
   handleCreateProjectFormSubmission,
   handleEditTaskFormSubmission,
+  handleDeleteProjectButtonClick,
   showCreateTaskForm,
   closeCreateTaskForm,
   showEditTaskForm,
@@ -19,7 +20,7 @@ import {
 
 import { 
   categories,
-  getStoredTasks,
+  getStoredCategories,
   updateCategories,
   updateLocalStorage,
 } from './utils.js';
@@ -37,24 +38,24 @@ function initializeEventListeners() {
   handleInboxCategoryClick();
   handleProjectCategoryClick();
   handleEditTaskFormSubmission();
+  handleDeleteProjectButtonClick();
 }
 
 function initializeApp() {
   // Check if there are tasks in localStorage
-  let storedTasks = getStoredTasks();
+  let storedCategories = getStoredCategories();
 
   // If there are no stored tasks, use default tasks and save them to localStorage
-  if (storedTasks.length === 0) {
+  if (storedCategories.length === 0) {
     updateLocalStorage(categories);
-    storedTasks = [...categories];
+    storedCategories = [...categories];
   }
 
-  // Update the contents of myTasks instead of reassigning it
-  updateCategories(storedTasks);
+  // Update the contents of taskCategories from localStorage instead of reassigning it
+  updateCategories(storedCategories);
 
-  renderProjectsList(storedTasks);
-  // renderIncompleteTasks('inbox', storedTasks);
-  renderTasks('inbox', storedTasks);
+  renderProjectsList(storedCategories);
+  renderTasks('inbox', storedCategories);
   initializeEventListeners();
 }
 

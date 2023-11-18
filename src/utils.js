@@ -57,7 +57,7 @@ export let categories = [
 ]
 
 
-export function getStoredTasks() {
+export function getStoredCategories() {
   const storedTasks = localStorage.getItem('taskCategories');
   if (storedTasks) {
     return JSON.parse(storedTasks);
@@ -71,10 +71,10 @@ export function updateLocalStorage(categories) {
 }
 
 
-export function updateCategories(storedTasks) {
+export function updateCategories(updatedCategories) {
   // Clear out the tasks
   categories.length = 0;
 
   // Add the new tasks
-  storedTasks.forEach(category => categories.push(category));
+  updatedCategories.forEach(category => categories.push(category));
 }

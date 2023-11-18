@@ -177,6 +177,11 @@ h2 {
   cursor: pointer;
 }
 
+.add-project-btn:focus {
+  border: none;
+  background-color: rgb(255, 255, 255, .0);
+}
+
 
 
 /* MAIN */
@@ -314,10 +319,20 @@ h1 {
   margin-bottom: .5rem;
 }
 
+.edit-btn, 
 .delete-btn {
-  margin-left: .5rem;
+  display: none;
 }
 
+.delete-btn {
+  margin-left: .5rem;
+  color: red;
+}
+
+.task-item:hover .edit-btn,
+.task-item:hover .delete-btn {
+	display: inline-block;
+}
 
 
 
@@ -522,8 +537,8 @@ dialog {
   display: block;
 }
 
-#rename-option,
-#delete-option {
+.rename-option,
+.delete-option {
   color: #fff;
   padding: .75rem 1.5rem;
   text-decoration: none;
@@ -535,8 +550,12 @@ dialog {
   text-align: left;
 }
 
-#rename-option:hover,
-#delete-option:hover {
+.delete-option {
+  color: red;
+}
+
+.rename-option:hover,
+.delete-option:hover {
   background-color: #3b3b3b;
 
 }
