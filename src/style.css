@@ -443,7 +443,8 @@ dialog {
   width: 300px;
 }
 
-.add-project-modal-title {
+.modal-title,
+.modal-description {
   color: #fff;
 }
 
@@ -455,7 +456,9 @@ dialog {
 }
 
 .close-modal-btn,
-.add-project-to-list {
+.add-project-to-list,
+#confirm-delete-btn,
+#cancel-delete-btn {
   padding: .5rem 1rem;
   background-color: #333333;
   color: white;
@@ -463,7 +466,8 @@ dialog {
   border-radius: 4px;
 }
 
-.add-project-to-list {
+.add-project-to-list,
+#confirm-delete-btn {
   background-color: #DD4B4A;
   margin-left: .25rem;
 }

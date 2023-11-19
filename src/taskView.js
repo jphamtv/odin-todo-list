@@ -173,21 +173,57 @@ export function handleProjectCategoryClick() {
 }
 
 
-function handleRenameProjectButton() {
-  console.log('Pending');
-}
-
 export function handleDeleteProjectButtonClick() {
   const projectListElement = document.querySelector('#project-list');
+  const deleteConfirmationModal = document.querySelector('#delete-confirmation-modal');
+  const confirmButton = document.querySelector('#confirm-delete-btn');
+  const cancelButton = document.querySelector('#cancel-delete-btn');
+  const moreOptionsToggle = document.querySelector('.more-options-toggle');
+  
   projectListElement.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-option')) {
       const categoryId = event.target.dataset.categoryId;
-      deleteCategory(categoryId);
-      renderProjectsList(categories);
-      triggerInboxButtonClick();
+      
+      // Find the closest menu content related to clicked delete option
+      const moreOptionsContent = event.target.closest('.more-options-content');
+
+      deleteConfirmationModal.showModal();
+
+      if (moreOptionsContent) {
+        moreOptionsContent.classList.remove('show');
+        moreOptionsToggle.style.color = '';      
+      }
+      
+      // Set up one-time event listener for the confirm button
+      confirmButton.addEventListener('click', () => {
+        deleteCategory(categoryId);
+        deleteConfirmationModal.close();
+        renderProjectsList(categories);
+        triggerInboxButtonClick();      
+      });
+
+      // Cancel deletion
+      cancelButton.addEventListener('click', () => {
+        deleteConfirmationModal.close();
+      });
     }
   });
 }
+
+
+function handleRenameProjectButtonClick() {
+  const projectListElement = document.querySelector('#project-list');
+  const editProjectTitleModal = document.querySelector('#edit-project-title-modal');
+  projectListElement.addEventListener('click', (event) => {
+    if (event.target.classList.contains('rename-option')) {
+      const categoryId = event.target.dataset.categoryId;
+
+      editProjectTitleModal.showModal();
+    }
+  });
+}
+
+
 
 function triggerInboxButtonClick() {
   const inboxOptionButton = document.querySelector('.inbox-button');
@@ -360,8 +396,6 @@ export function handleCreateProjectFormSubmission() {
 
 function triggerNewCategoryButtonClick(categoryId) {
   const newProjectButton = document.querySelector(`.project-button[data-category-id='${categoryId}']`);
-  console.log(categoryId);
-  console.log(newProjectButton);
   if (newProjectButton) {
     newProjectButton.click();
   } else {

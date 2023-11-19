@@ -13,10 +13,10 @@
 </head>
 <body>
 
-    <!-- Modal for adding a project (initially hidden) -->
+  <!-- Modal for adding a project (initially hidden) -->
   <dialog id="add-project-modal">
     <form action="" id="create-project-form">
-      <h2 class="add-project-modal-title">Add project</h2>
+      <h2 class="modal-title">Add project</h2>
       <div class="project-title-wrapper">
         <input type="text" id="project-title-input">
       </div>
@@ -55,18 +55,20 @@
   </dialog>
 
   <!-- Inline form for renaming (initially hidden) -->
-  <div id="renameForm" style="display: none;">
-    <input type="text" id="newName">
-    <button id="confirmRename">Save</button>
-  </div>
+  <dialog id="edit-project-title-modal">
+    <input type="text" id="rename-category-input">
+    <button id="confirm-rename-category">Save</button>
+  </dialog>
 
   <!-- Modal for deletion confirmation (initially hidden) -->
-  <div id="deleteModal" style="display: none;">
-    <h2>Delete Project?</h2>
-    <p>This will delete the project and all of its tasks.</p>
-    <button id="cancelDelete">Cancel</button>
-    <button id="confirmDelete">Delete</button>
-  </div>
+  <dialog id="delete-confirmation-modal">
+    <h2 class="modal-title">Delete Project?</h2>
+    <p class="modal-description">This will delete the project and all of its tasks.</p>
+    <div class="modal-btns">
+      <button id="cancel-delete-btn">Cancel</button>
+      <button id="confirm-delete-btn">Delete</button>
+    </div>
+  </dialog>
 
   <div id="grid-container">
 
