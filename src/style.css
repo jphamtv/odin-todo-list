@@ -189,6 +189,7 @@ h2 {
   grid-column: 2 / 3;
   grid-row: 2 / 3;
   background-color: #1E1E1E;
+  min-width: 500px;
 }
 
 .main-wrapper {

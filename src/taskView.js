@@ -1,4 +1,6 @@
 // src/taskView.js
+import { categories, formatDueDate } from './utils.js';
+
 import {
   createCategory,
   createTask,
@@ -8,7 +10,7 @@ import {
   editTask,
   toggleTaskStatus,
 } from './taskService.js';
-import { categories } from './utils.js';
+
 
 // Initial state for category view
 let currentCategoryViewId = 'inbox';
@@ -257,7 +259,6 @@ export function handleEditProjectTitleSaveButton() {
 }
 
 
-
 function triggerInboxButtonClick() {
   const inboxOptionButton = document.querySelector('.inbox-button');
   if (inboxOptionButton) {
@@ -355,7 +356,7 @@ function createTaskItemElement(task) {
   if (task.dueDate) {
     const dueDateDiv = document.createElement('div');
     dueDateDiv.classList.add('due-date');
-    dueDateDiv.textContent = task.dueDate;
+    dueDateDiv.textContent = formatDueDate(task.dueDate);
     taskDiv.appendChild(dueDateDiv);
   }
   
@@ -449,11 +450,16 @@ export function showCreateTaskForm() {
   document.addEventListener('DOMContentLoaded', () => {
     const createTaskFormElement = document.querySelector('.form-container');
     const addTaskButton = document.querySelector('.add-task-btn');
+    const dueDatePicker = document.querySelector('#due-date');
+    const today = new Date().toISOString().split('T')[0];
+
     addTaskButton.addEventListener('click', () => {
       createTaskFormElement.style.display = 'block';
       document.querySelector('#title').focus(); 
       addTaskButton.style.display = 'none';
     });  
+
+    dueDatePicker.setAttribute('min', today);
   });
 }
 
@@ -620,11 +626,14 @@ function displayTaskDetailsForEditing(categoryId, taskId) {
   const category = categories.find(category => category.id === categoryId);
   const task = category.tasks.find(task => task.id === taskId);
   const categoryDropDownButton = document.querySelector('.project-drop-down');
+  const dueDatePicker = document.querySelector('#edit-due-date');
+  const today = new Date().toISOString().split('T')[0];
   
   document.querySelector('#task-id').value = task.id;
   document.querySelector('#edit-title').value = task.title;
   document.querySelector('#edit-description').textContent = task.description;
-  document.querySelector('#edit-due-date').value = task.dueDate;
+  dueDatePicker.value = task.dueDate;
+  dueDatePicker.setAttribute('min', today);
   document.querySelector(`.priority-drop-down option[value='${task.priority}']`).selected = true;
   
   categoryDropDownButton.innerHTML = '';

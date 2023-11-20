@@ -1,4 +1,5 @@
 // src/utils.js
+import { parseISO, format, isThisYear } from 'date-fns';
 
 // Data structure to store categories and tasks
 export let categories = [
@@ -77,4 +78,14 @@ export function updateCategories(updatedCategories) {
 
   // Add the new tasks
   updatedCategories.forEach(category => categories.push(category));
+}
+
+export function formatDueDate(dueDate) {
+  const parsedDate = parseISO(dueDate);
+
+  if (isThisYear(parsedDate)) {
+    return format(parsedDate, 'MMM d');    
+  } else {
+    return format(parsedDate, 'MMM d yyyy');
+  }
 }
