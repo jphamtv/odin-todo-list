@@ -27,6 +27,19 @@
     </form>      
   </dialog>
 
+    <!-- Modal for editing a project title (initially hidden) -->
+    <dialog id="edit-project-title-modal">
+      <form action="" id="edit-project-title-form">
+        <h2 class="modal-title">Edit project name</h2>
+          <input type="hidden" id="category-id" name="category-id">
+          <input type="text" id="edit-project-title-input">
+        <div class="modal-btns">
+          <button class="close-edit-modal-btn">Cancel</button>
+          <button class="save-btn" type="submit">Save</button>
+        </div>
+      </form>
+    </dialog>
+
   <!-- Modal for editing a task (initially hidden) -->
   <dialog id="edit-task-modal">
     <div class="edit-form-container">
@@ -52,12 +65,6 @@
         </footer>
       </form>
     </div>
-  </dialog>
-
-  <!-- Inline form for renaming (initially hidden) -->
-  <dialog id="edit-project-title-modal">
-    <input type="text" id="rename-category-input">
-    <button id="confirm-rename-category">Save</button>
   </dialog>
 
   <!-- Modal for deletion confirmation (initially hidden) -->

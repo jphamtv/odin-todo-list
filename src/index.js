@@ -13,6 +13,8 @@ import {
   handleCreateProjectFormSubmission,
   handleEditTaskFormSubmission,
   handleDeleteProjectButtonClick,
+  handleRenameProjectButtonClick,
+  handleEditProjectTitleSaveButton,
   showCreateTaskForm,
   closeCreateTaskForm,
   showEditTaskForm,
@@ -39,6 +41,8 @@ function initializeEventListeners() {
   handleProjectCategoryClick();
   handleEditTaskFormSubmission();
   handleDeleteProjectButtonClick();
+  handleRenameProjectButtonClick();
+  handleEditProjectTitleSaveButton();
 }
 
 function initializeApp() {

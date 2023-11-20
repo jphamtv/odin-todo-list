@@ -164,10 +164,15 @@ export function handleProjectCategoryClick() {
           createTaskFormElement.style.display = 'none';
           addTaskButton.style.display = 'flex';
           clearFormFields();
-        } 
+        }         
         
-        renderTasks(categoryId, categories);
+      } else if (currentCategoryViewId === categoryId) {
+        categoryHeaderTitle.textContent = category.title;
+        const projectLi = document.querySelector(`.project-item[data-category-id='${categoryId}']`);
+        projectLi.classList.add('current');        
       }
+
+      renderTasks(categoryId, categories);
     }
   });
 }
@@ -211,7 +216,7 @@ export function handleDeleteProjectButtonClick() {
 }
 
 
-function handleRenameProjectButtonClick() {
+export function handleRenameProjectButtonClick() {
   const projectListElement = document.querySelector('#project-list');
   const editProjectTitleModal = document.querySelector('#edit-project-title-modal');
   projectListElement.addEventListener('click', (event) => {
@@ -219,7 +224,35 @@ function handleRenameProjectButtonClick() {
       const categoryId = event.target.dataset.categoryId;
 
       editProjectTitleModal.showModal();
+      displayProjectTitleForEditing(categoryId);
     }
+  });
+}
+
+
+function displayProjectTitleForEditing(categoryId) {
+  const category = categories.find(category => category.id === categoryId);
+
+  document.querySelector('#category-id').value = category.id;
+  document.querySelector('#edit-project-title-input').value = category.title;  
+}
+
+
+export function handleEditProjectTitleSaveButton() {
+  document.querySelector('#edit-project-title-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const updatedTitle = document.querySelector('#edit-project-title-input').value;
+    const categoryId = document.querySelector('#category-id').value;
+
+    editCategory(categoryId, updatedTitle);
+
+    renderProjectsList(categories);
+    clearFormFields();
+    editProjectTitleModal.close();
+
+    triggerCategoryButtonClick(categoryId);
+
   });
 }
 
@@ -389,17 +422,17 @@ export function handleCreateProjectFormSubmission() {
 
     const categoryId = categories[categories.length - 1].id;
     
-    triggerNewCategoryButtonClick(categoryId);
+    triggerCategoryButtonClick(categoryId);
   });
 }
 
 
-function triggerNewCategoryButtonClick(categoryId) {
-  const newProjectButton = document.querySelector(`.project-button[data-category-id='${categoryId}']`);
-  if (newProjectButton) {
-    newProjectButton.click();
+function triggerCategoryButtonClick(categoryId) {
+  const projectButton = document.querySelector(`.project-button[data-category-id='${categoryId}']`);
+  if (projectButton) {
+    projectButton.click();
   } else {
-    console.error('New category button not found');
+    console.error('Category button not found');
   }
 }
 
@@ -408,6 +441,7 @@ export function clearFormFields() {
   document.querySelector('#create-task').reset();
   document.querySelector('#create-project-form').reset();
   document.querySelector('#edit-task').reset();
+  document.querySelector('#edit-project-title-form').reset();
 }
 
 
@@ -455,6 +489,10 @@ document.addEventListener('keydown', (event) => {
     const addProjectModal = document.querySelector('#add-project-modal');
     const addProjectSubmitButton = document.querySelector('.add-project-to-list');
 
+    // Check if the edit project modal is open and visible
+    const editProjectTitleModal = document.querySelector('#edit-project-title-modal');
+    const editProjectTitleSaveButton = document.querySelector('.save-btn');
+
     if (getComputedStyle(addTaskForm).display !== 'none' && getComputedStyle(addProjectModal).display === 'none') {
       addTaskSubmitButton.click();
     } else if (getComputedStyle(addProjectModal).display !== 'none') {
@@ -463,6 +501,9 @@ document.addEventListener('keydown', (event) => {
     } else if (getComputedStyle(editTaskModal).display !== 'none') {
       editTaskSubmitButton.click();
       editTaskModal.close();
+    } else if (getComputedStyle(editProjectTitleModal). display !== 'none') {
+      editProjectTitleSaveButton.click();
+      editProjectTitleModal.close();
     }
   }
 });
@@ -544,6 +585,14 @@ const closeEditTaskModalButton = document.querySelector('.cancel-edit-btn');
 closeEditTaskModalButton.addEventListener('click', (event) => {
   event.preventDefault();
   editTaskDialog.close();
+});
+
+const editProjectTitleModal = document.querySelector('#edit-project-title-modal');
+const editProjectTitleCancelButton = document.querySelector('.close-edit-modal-btn');
+
+editProjectTitleCancelButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  editProjectTitleModal.close();
 });
 
 
