@@ -224,6 +224,13 @@ export function handleRenameProjectButtonClick() {
   projectListElement.addEventListener('click', (event) => {
     if (event.target.classList.contains('rename-option')) {
       const categoryId = event.target.dataset.categoryId;
+      const moreOptionsContent = event.target.closest('.more-options-content');
+      const moreOptionsToggle = document.querySelector('.more-options-toggle');
+
+      if (moreOptionsContent) {
+        moreOptionsContent.classList.remove('show');
+        moreOptionsToggle.style.color = '';      
+      }
 
       editProjectTitleModal.showModal();
       displayProjectTitleForEditing(categoryId);
@@ -497,7 +504,7 @@ document.addEventListener('keydown', (event) => {
 
     // Check if the edit project modal is open and visible
     const editProjectTitleModal = document.querySelector('#edit-project-title-modal');
-    const editProjectTitleSaveButton = document.querySelector('.save-btn');
+    const editProjectTitleSaveButton = document.querySelector('.save-title-btn');
 
     if (getComputedStyle(addTaskForm).display !== 'none' && getComputedStyle(addProjectModal).display === 'none') {
       addTaskSubmitButton.click();

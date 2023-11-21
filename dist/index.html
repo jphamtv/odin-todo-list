@@ -18,7 +18,7 @@
     <form action="" id="create-project-form">
       <h2 class="modal-title">Add project</h2>
       <div class="project-title-wrapper">
-        <input type="text" id="project-title-input">
+        <input type="text" id="project-title-input" required>
       </div>
       <div class="modal-btns">
         <button class="close-modal-btn">Cancel</button>
@@ -35,7 +35,7 @@
           <input type="text" id="edit-project-title-input">
         <div class="modal-btns">
           <button class="close-edit-modal-btn">Cancel</button>
-          <button class="save-btn" type="submit">Save</button>
+          <button class="save-title-btn" type="submit">Save</button>
         </div>
       </form>
     </dialog>
@@ -131,9 +131,6 @@
                 </select>
               </div>
               <footer class="form-footer">
-                <select name="project-drop-down" class="project-drop-down">
-                  <option value="inbox" selected>Inbox</option>
-                </select>
                 <div class="form-btns">
                   <button class="cancel-btn">Cancel</button>
                   <button class="submit-btn" type="submit">Add task</button>
