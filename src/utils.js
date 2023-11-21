@@ -1,7 +1,10 @@
 // src/utils.js
 import { parseISO, format, isThisYear } from 'date-fns';
 
-// Data structure to store categories and tasks
+/**
+ * Default data structure to store categories and tasks.
+ * These are used to populate the application on initial load.
+ */
 export let categories = [
   {
     id: 'inbox',
@@ -9,7 +12,6 @@ export let categories = [
     tasks: [
       {
         id: '1',
-        category: 'inbox',
         title: 'My first task',
         description: 'Description of my first task',
         dueDate: '2023-11-23',
@@ -18,7 +20,6 @@ export let categories = [
       },
       {
         id: '2',
-        category: 'inbox',
         title: 'My second task',
         description: '',
         dueDate: '',
@@ -27,7 +28,6 @@ export let categories = [
       },
       {
         id: '3',
-        category: 'Project A',
         title: 'My third task',
         description: '',
         dueDate: '',
@@ -47,7 +47,7 @@ export let categories = [
     tasks: [
       {
         id: '3',
-        title: 'My third task',
+        title: 'Pick up dry cleaning',
         description: '',
         dueDate: '',
         priority: 'low',
@@ -57,7 +57,10 @@ export let categories = [
   },
 ]
 
-
+/**
+ * Retrieves categories from localStorage, parses them, and returns them.
+ * If there are no stored categories, returns an empty array.
+ */
 export function getStoredCategories() {
   const storedTasks = localStorage.getItem('taskCategories');
   if (storedTasks) {
@@ -66,12 +69,16 @@ export function getStoredCategories() {
   return [];// Return empty array if nothing in localStorage to avoid error
 }
 
-
+/**
+ * Updates the localStorage item 'taskCategories' with the latest categories array.
+ */
 export function updateLocalStorage(categories) {
   localStorage.setItem('taskCategories', JSON.stringify(categories));
 }
 
-
+/**
+ * Clears the current categories array and updates it with new data.
+ */
 export function updateCategories(updatedCategories) {
   // Clear out the tasks
   categories.length = 0;
@@ -80,7 +87,13 @@ export function updateCategories(updatedCategories) {
   updatedCategories.forEach(category => categories.push(category));
 }
 
+/**
+ * Formats a given ISO date string to a more readable format.
+ * If the date is in the current year, omits the year from the string.
+ */
 export function formatDueDate(dueDate) {
+  if (!dueDate) return ''; 
+
   const parsedDate = parseISO(dueDate);
 
   if (isThisYear(parsedDate)) {

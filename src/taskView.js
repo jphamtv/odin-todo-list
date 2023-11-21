@@ -18,6 +18,50 @@ let currentCategoryViewId = 'inbox';
 // Initial state for whether completed tasks are shown
 let showCompletedTasks = false;
 
+// Change behavior of the return key to programmatically click the 'submit' btn.
+document.addEventListener('keydown', (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault(); 
+
+    // Check if add task form is open and visible
+    const addTaskForm = document.querySelector('.form-container');
+    const addTaskSubmitButton = document.querySelector('.submit-btn');
+
+    // Check if edit task form is open and visible
+    const editTaskModal = document.querySelector('#edit-task-modal');
+    const editTaskSubmitButton = document.querySelector('.save-btn');
+    
+    // Check if the add project modal is open and visible
+    const addProjectModal = document.querySelector('#add-project-modal');
+    const addProjectSubmitButton = document.querySelector('.add-project-to-list');
+
+    // Check if the edit project modal is open and visible
+    const editProjectTitleModal = document.querySelector('#edit-project-title-modal');
+    const editProjectTitleSaveButton = document.querySelector('.save-title-btn');
+
+    if (getComputedStyle(addTaskForm).display !== 'none' && getComputedStyle(addProjectModal).display === 'none') {
+      addTaskSubmitButton.click();
+    } else if (getComputedStyle(addProjectModal).display !== 'none') {
+      addProjectSubmitButton.click();
+      addProjectModal.close();
+    } else if (getComputedStyle(editTaskModal).display !== 'none') {
+      editTaskSubmitButton.click();
+      editTaskModal.close();
+    } else if (getComputedStyle(editProjectTitleModal). display !== 'none') {
+      editProjectTitleSaveButton.click();
+      editProjectTitleModal.close();
+    }
+  }
+});
+
+
+export function clearFormFields() {
+  document.querySelector('#create-task').reset();
+  document.querySelector('#create-project-form').reset();
+  document.querySelector('#edit-task').reset();
+  document.querySelector('#edit-project-title-form').reset();
+}
+
 
 export function renderProjectsList(categories) {
   // Get a reference to the project list element
@@ -276,6 +320,40 @@ function triggerInboxButtonClick() {
 }
 
 
+export function handleCreateProjectFormSubmission() {
+  document.querySelector('#create-project-form').addEventListener('submit', (event) => {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+  
+    // Get values from the form fields
+    const title = document.querySelector('#project-title-input').value;
+  
+    // Create a new project and add it to the database
+    createCategory(title);
+
+    renderProjectsList(categories);
+
+    // Clear fields and close the modal
+    clearFormFields();
+    projectDialog.close();
+
+    const categoryId = categories[categories.length - 1].id;
+    
+    triggerCategoryButtonClick(categoryId);
+  });
+}
+
+
+function triggerCategoryButtonClick(categoryId) {
+  const projectButton = document.querySelector(`.project-button[data-category-id='${categoryId}']`);
+  if (projectButton) {
+    projectButton.click();
+  } else {
+    console.error('Category button not found');
+  }
+}
+
+
 export function renderTasks(categoryId, categories) {
   const category = categories.find(category => category.id === categoryId);
   if (category) {
@@ -411,48 +489,6 @@ export function handleCreateTaskFormSubmission() {
 }
 
 
-export function handleCreateProjectFormSubmission() {
-  document.querySelector('#create-project-form').addEventListener('submit', (event) => {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-  
-    // Get values from the form fields
-    const title = document.querySelector('#project-title-input').value;
-  
-    // Create a new project and add it to the database
-    createCategory(title);
-
-    renderProjectsList(categories);
-
-    // Clear fields and close the modal
-    clearFormFields();
-    projectDialog.close();
-
-    const categoryId = categories[categories.length - 1].id;
-    
-    triggerCategoryButtonClick(categoryId);
-  });
-}
-
-
-function triggerCategoryButtonClick(categoryId) {
-  const projectButton = document.querySelector(`.project-button[data-category-id='${categoryId}']`);
-  if (projectButton) {
-    projectButton.click();
-  } else {
-    console.error('Category button not found');
-  }
-}
-
-
-export function clearFormFields() {
-  document.querySelector('#create-task').reset();
-  document.querySelector('#create-project-form').reset();
-  document.querySelector('#edit-task').reset();
-  document.querySelector('#edit-project-title-form').reset();
-}
-
-
 export function showCreateTaskForm() {
   document.addEventListener('DOMContentLoaded', () => {
     const createTaskFormElement = document.querySelector('.form-container');
@@ -483,43 +519,6 @@ export function closeCreateTaskForm() {
     });  
   });
 }
-
-
-// Change behavior of the return key to programmatically click the 'submit' btn.
-document.addEventListener('keydown', (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault(); 
-
-    // Check if add task form is open and visible
-    const addTaskForm = document.querySelector('.form-container');
-    const addTaskSubmitButton = document.querySelector('.submit-btn');
-
-    // Check if edit task form is open and visible
-    const editTaskModal = document.querySelector('#edit-task-modal');
-    const editTaskSubmitButton = document.querySelector('.save-btn');
-    
-    // Check if the add project modal is open and visible
-    const addProjectModal = document.querySelector('#add-project-modal');
-    const addProjectSubmitButton = document.querySelector('.add-project-to-list');
-
-    // Check if the edit project modal is open and visible
-    const editProjectTitleModal = document.querySelector('#edit-project-title-modal');
-    const editProjectTitleSaveButton = document.querySelector('.save-title-btn');
-
-    if (getComputedStyle(addTaskForm).display !== 'none' && getComputedStyle(addProjectModal).display === 'none') {
-      addTaskSubmitButton.click();
-    } else if (getComputedStyle(addProjectModal).display !== 'none') {
-      addProjectSubmitButton.click();
-      addProjectModal.close();
-    } else if (getComputedStyle(editTaskModal).display !== 'none') {
-      editTaskSubmitButton.click();
-      editTaskModal.close();
-    } else if (getComputedStyle(editProjectTitleModal). display !== 'none') {
-      editProjectTitleSaveButton.click();
-      editProjectTitleModal.close();
-    }
-  }
-});
 
 
 export function handleCheckBoxClick() {

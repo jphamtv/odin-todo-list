@@ -1,6 +1,7 @@
 // src/index.js
 import './style.css';
 
+// Task view handlers
 import { 
   renderTasks,
   renderProjectsList, 
@@ -20,6 +21,7 @@ import {
   showEditTaskForm,
 } from './taskView.js';
 
+// Utility functions for managing categories/tasks and local storage
 import { 
   categories,
   getStoredCategories,
@@ -27,7 +29,9 @@ import {
   updateLocalStorage,
 } from './utils.js';
 
-
+/**
+ * Sets up event listeners for various user interactions.
+ */
 function initializeEventListeners() {
   showCreateTaskForm();
   closeCreateTaskForm();
@@ -35,8 +39,8 @@ function initializeEventListeners() {
   handleCreateProjectFormSubmission();
   handleCreateTaskFormSubmission();
   handleToggleCompletedTasksButtonClick();
-  handleCheckBoxClick(); // Comment out if issues and uncomment below
-  handleDeleteButtonClick(); // Comment out if issues and uncomment below
+  handleCheckBoxClick(); 
+  handleDeleteButtonClick(); 
   handleInboxCategoryClick();
   handleProjectCategoryClick();
   handleEditTaskFormSubmission();
@@ -45,6 +49,10 @@ function initializeEventListeners() {
   handleEditProjectTitleSaveButton();
 }
 
+/**
+ * Initializes the application by loading categories, rendering tasks and projects,
+ * and setting up event listeners.
+ */
 function initializeApp() {
   // Check if there are tasks in localStorage
   let storedCategories = getStoredCategories();
@@ -58,9 +66,13 @@ function initializeApp() {
   // Update the contents of taskCategories from localStorage instead of reassigning it
   updateCategories(storedCategories);
 
+  // Initial rendering of projects and tasks
   renderProjectsList(storedCategories);
   renderTasks('inbox', storedCategories);
+
+  // Initialize all event listeners for user interactions
   initializeEventListeners();
 }
 
+// Start the application
 initializeApp();
