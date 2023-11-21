@@ -1,10 +1,10 @@
 // src/index.js
-import './style.css';
+import "./style.css";
 
 // Task view handlers
-import { 
+import {
   renderTasks,
-  renderProjectsList, 
+  renderProjectsList,
   handleCheckBoxClick,
   handleDeleteButtonClick,
   handleToggleCompletedTasksButtonClick,
@@ -19,15 +19,15 @@ import {
   showCreateTaskForm,
   closeCreateTaskForm,
   showEditTaskForm,
-} from './taskView.js';
+} from "./taskView";
 
 // Utility functions for managing categories/tasks and local storage
-import { 
+import {
   categories,
   getStoredCategories,
   updateCategories,
   updateLocalStorage,
-} from './utils.js';
+} from "./utils";
 
 /**
  * Sets up event listeners for various user interactions.
@@ -39,8 +39,8 @@ function initializeEventListeners() {
   handleCreateProjectFormSubmission();
   handleCreateTaskFormSubmission();
   handleToggleCompletedTasksButtonClick();
-  handleCheckBoxClick(); 
-  handleDeleteButtonClick(); 
+  handleCheckBoxClick();
+  handleDeleteButtonClick();
   handleInboxCategoryClick();
   handleProjectCategoryClick();
   handleEditTaskFormSubmission();
@@ -68,7 +68,7 @@ function initializeApp() {
 
   // Initial rendering of projects and tasks
   renderProjectsList(storedCategories);
-  renderTasks('inbox', storedCategories);
+  renderTasks("inbox", storedCategories);
 
   // Initialize all event listeners for user interactions
   initializeEventListeners();

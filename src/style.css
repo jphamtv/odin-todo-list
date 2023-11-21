@@ -12,16 +12,15 @@
 }
 
 body {
-  color: #E2E2E2;
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  color: #e2e2e2;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
   font-size: 14px;
-
 }
 
 input,
 input::placeholder,
 textarea::placeholder {
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
 
 ul {
@@ -35,11 +34,11 @@ ul {
   border-radius: 4px;
   border: none;
   color: #fff;
-  background-color: rgb(255, 255, 255, .10);
+  background-color: rgb(255, 255, 255, 0.1);
 }
 
-.btn:hover{
-  background-color: rgb(255, 255, 255, .20);
+.btn:hover {
+  background-color: rgb(255, 255, 255, 0.2);
   cursor: pointer;
 }
 
@@ -47,7 +46,6 @@ button.current,
 li.current {
   background-color: #333333;
 }
-
 
 /* TOP BAR */
 
@@ -65,7 +63,7 @@ li.current {
 
 .top-bar-wrapper {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   align-items: center;
   margin-left: 2rem;
 }
@@ -75,19 +73,18 @@ li.current {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(0, 0, 0, .0);
+  background-color: rgb(0, 0, 0, 0);
   border: none;
   border-radius: 4px;
   color: #fff;
-  padding: .25rem;
+  padding: 0.25rem;
 }
 
 .home-btn:hover,
 .menu-btn:hover {
-  background-color: rgb(255, 255, 255, .20);
+  background-color: rgb(255, 255, 255, 0.2);
   cursor: pointer;
 }
-
 
 /* LEFT MENU */
 
@@ -112,17 +109,17 @@ h2 {
 }
 
 .inbox-button {
-  background-color: rgb(0, 0, 0, .0);
+  background-color: rgb(0, 0, 0, 0);
   color: #fff;
   padding: 10px 0 10px 8px;
   border-radius: 6px;
   border: none;
   margin-bottom: 2rem;
   width: 100%;
-  
+
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .inbox-button:hover {
@@ -133,7 +130,7 @@ h2 {
 .projects-header {
   display: flex;
   align-items: flex-start;
-  gap: .25rem;
+  gap: 0.25rem;
   justify-content: space-between;
   width: 100%;
 }
@@ -141,20 +138,20 @@ h2 {
 .project-item {
   display: flex;
   align-items: center;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   border-radius: 6px;
   padding: 2px 0px;
 }
 
 .project-button {
-  background-color: rgb(0, 0, 0, .0);
+  background-color: rgb(0, 0, 0, 0);
   color: #fff;
   width: 100%;
 
   display: flex;
   align-items: center;
-  gap: .5rem;
-  padding: .75rem 0 .75rem 8px;
+  gap: 0.5rem;
+  padding: 0.75rem 0 0.75rem 8px;
   border-radius: 6px;
   border: none;
 }
@@ -166,32 +163,31 @@ h2 {
 
 .add-project-btn {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   padding: 5px 8px;
   border-radius: 4px;
   border: none;
-  background-color: rgb(255, 255, 255, .0);
+  background-color: rgb(255, 255, 255, 0);
   color: #fff;
   margin-left: 6px;
 }
 
 .add-project-btn:hover {
-  background-color: rgb(255, 255, 255, .10);
+  background-color: rgb(255, 255, 255, 0.1);
   cursor: pointer;
 }
 
 .add-project-btn:focus {
   border: none;
-  background-color: rgb(255, 255, 255, .0);
+  background-color: rgb(255, 255, 255, 0);
 }
-
 
 /* MAIN */
 
 .main-container {
   grid-column: 2 / 3;
   grid-row: 2 / 3;
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
   min-width: 500px;
 }
 
@@ -212,25 +208,24 @@ h1 {
   margin: 2rem 0 1rem;
 }
 
-
 .toggle-completed-tasks-btn {
   display: block;
   padding: 8px;
   border-radius: 4px;
   border: none;
   color: #fff;
-  background-color: rgb(255, 255, 255, .10);
+  background-color: rgb(255, 255, 255, 0.1);
 }
 
-.toggle-completed-tasks-btn:hover{
-  background-color: rgb(255, 255, 255, .20);
+.toggle-completed-tasks-btn:hover {
+  background-color: rgb(255, 255, 255, 0.2);
   cursor: pointer;
 }
 
 .task-item {
   display: flex;
   gap: 1rem;
-  padding: .75rem 0 .5rem;
+  padding: 0.75rem 0 0.5rem;
   border-bottom: 1px solid rgb(58, 58, 58);
 }
 
@@ -253,7 +248,7 @@ h1 {
   height: 20px;
   border: 1px solid #989898;
   border-radius: 20px;
-  background-color: rgb(0, 0, 0, .0);
+  background-color: rgb(0, 0, 0, 0);
 }
 
 .checkbox-btn:hover {
@@ -286,22 +281,22 @@ h1 {
 
 .add-task-btn {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   padding: 8px;
   border-radius: 4px;
   border: none;
-  background-color: rgb(255, 255, 255, .0);
+  background-color: rgb(255, 255, 255, 0);
   color: #fff;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .add-task-btn:hover {
-  background-color: rgb(255, 255, 255, .10);
+  background-color: rgb(255, 255, 255, 0.1);
   cursor: pointer;
 }
 
 .title {
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   line-height: 1.75;
 }
 
@@ -311,33 +306,32 @@ h1 {
 }
 
 .description {
-  margin-bottom: .75rem;
+  margin-bottom: 0.75rem;
   color: #8f8f8f;
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 300;
 }
 
 .due-date {
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 300;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
-.edit-btn, 
+.edit-btn,
 .delete-btn {
   display: none;
 }
 
 .delete-btn {
-  margin-left: .5rem;
+  margin-left: 0.5rem;
   color: red;
 }
 
 .task-item:hover .edit-btn,
 .task-item:hover .delete-btn {
-	display: inline-block;
+  display: inline-block;
 }
-
 
 /* FORM */
 
@@ -345,13 +339,13 @@ h1 {
   display: none;
 }
 
-.form-container>form {
+.form-container > form {
   display: flex;
   flex-direction: column;
 }
 
 form {
-  padding: .5rem .5rem 0;
+  padding: 0.5rem 0.5rem 0;
   border: 1px solid rgb(98, 98, 98);
   border-radius: 8px;
 }
@@ -359,13 +353,13 @@ form {
 input,
 textarea {
   height: 2rem;
-  background-color: rgb(0, 0, 0, .0);
+  background-color: rgb(0, 0, 0, 0);
   border: none;
   color: #fff;
 }
 
 .form-options {
-  margin: .5rem 0;
+  margin: 0.5rem 0;
 }
 
 input:focus,
@@ -377,14 +371,14 @@ textarea:focus {
   display: flex;
   justify-content: flex-end;
   border-top: 1px solid rgb(98, 98, 98);
-  padding: .75rem 0;
+  padding: 0.75rem 0;
 }
 
 .cancel-btn,
 .submit-btn,
 .save-btn,
 .save-title-btn {
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   background-color: #333333;
   color: white;
   border: none;
@@ -395,13 +389,13 @@ textarea:focus {
 .submit-btn,
 .save-btn,
 .save-title-btn {
-  background-color: #DD4B4A;
-  margin-left: .25rem;
+  background-color: #dd4b4a;
+  margin-left: 0.25rem;
 }
 
 select {
-  padding: .5rem;
-  background-color: rgb(0, 0, 0, .0);
+  padding: 0.5rem;
+  background-color: rgb(0, 0, 0, 0);
   color: white;
   border: 1px solid rgb(98, 98, 98);
   border-radius: 4px;
@@ -409,8 +403,8 @@ select {
 
 #due-date,
 #edit-due-date {
-  padding: 0 .5rem;
-  background-color: rgb(0, 0, 0, .0);
+  padding: 0 0.5rem;
+  background-color: rgb(0, 0, 0, 0);
   color: white;
   border: 1px solid rgb(98, 98, 98);
   border-radius: 4px;
@@ -421,11 +415,10 @@ input[type="date"] {
   filter: invert(45%) hue-rotate(180deg);
 }
 
-
 /* MODAL */
 
 dialog {
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
   border: none;
   border-radius: 4px;
   margin: 10rem auto;
@@ -453,7 +446,7 @@ dialog {
 .modal-btns {
   display: flex;
   justify-content: flex-end;
-  gap: .5rem;
+  gap: 0.5rem;
   padding-top: 1rem;
 }
 
@@ -462,7 +455,7 @@ dialog {
 .add-project-to-list,
 #confirm-delete-btn,
 #cancel-delete-btn {
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   background-color: #333333;
   color: white;
   border: none;
@@ -471,15 +464,14 @@ dialog {
 
 .add-project-to-list,
 #confirm-delete-btn {
-  background-color: #DD4B4A;
-  margin-left: .25rem;
+  background-color: #dd4b4a;
+  margin-left: 0.25rem;
 }
 
 ::backdrop {
   background-color: black;
   opacity: 0.5;
 }
-
 
 /* UPDATE TASK MODAL */
 
@@ -488,7 +480,7 @@ dialog {
   width: 600px;
 }
 
-.edit-form-container>form {
+.edit-form-container > form {
   display: flex;
   flex-direction: column;
 }
@@ -497,14 +489,13 @@ dialog {
   display: flex;
   justify-content: flex-end;
   border-top: 1px solid rgb(98, 98, 98);
-  padding: .75rem 0;
+  padding: 0.75rem 0;
 }
-
 
 /* EDIT PROJECT TITLE MODAL */
 
 #edit-project-title-modal {
-  width: 300px;  
+  width: 300px;
 }
 
 #edit-project-title-form {
@@ -519,7 +510,6 @@ dialog {
   width: 100%;
   box-sizing: border-box;
 }
-
 
 /* MORE OPTIONS BUTTON */
 
@@ -543,14 +533,14 @@ dialog {
 }
 
 .more-options-content {
-  display: none; 
+  display: none;
   position: absolute;
   background-color: #333333;
   border-radius: 6px;
   border: 1px solid #444444;
   min-width: 7rem;
-  padding: .5rem;
-  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  padding: 0.5rem;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -565,11 +555,11 @@ dialog {
 .rename-option,
 .delete-option {
   color: #fff;
-  padding: .75rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   text-decoration: none;
   display: block;
   width: 100%;
-  background-color: rgb(0, 0, 0, .0);
+  background-color: rgb(0, 0, 0, 0);
   border: none;
   border-radius: 4px;
   text-align: left;
@@ -582,7 +572,6 @@ dialog {
 .rename-option:hover,
 .delete-option:hover {
   background-color: #3b3b3b;
-
 }
 
 /* Hide default arrow for dropdown */
